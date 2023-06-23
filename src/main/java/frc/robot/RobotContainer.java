@@ -15,31 +15,31 @@ import frc.robot.Subsystems.SUB_SwerveModuleTest;
 
 public class RobotContainer {
 
-  //SUB_Drivetrain drivetrain = new SUB_Drivetrain();
-  SUB_SwerveModuleTest test = new SUB_SwerveModuleTest();
+  SUB_Drivetrain drivetrain = new SUB_Drivetrain();
+  //SUB_SwerveModuleTest test = new SUB_SwerveModuleTest();
   Joystick joystick = new Joystick(0);
 
   public RobotContainer() {
     configureBindings();
 
     // Configure default commands
-    // drivetrain.setDefaultCommand(
-    //     new RunCommand(
-    //         () -> drivetrain.drive(
-    //             -MathUtil.applyDeadband(joystick.getRawAxis(1), OIConstants.kDriveDeadband),
-    //             -MathUtil.applyDeadband(joystick.getRawAxis(0), OIConstants.kDriveDeadband),
-    //             -MathUtil.applyDeadband(joystick.getRawAxis(2), OIConstants.kDriveDeadband),
-    //             true, true),
-    //             drivetrain));
-
-    test.setDefaultCommand(
+    drivetrain.setDefaultCommand(
         new RunCommand(
-            () -> test.drive(
+            () -> drivetrain.drive(
                 -MathUtil.applyDeadband(joystick.getRawAxis(1), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(joystick.getRawAxis(0), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(joystick.getRawAxis(2), OIConstants.kDriveDeadband),
                 true, true),
-                test));
+                drivetrain));
+
+    // test.setDefaultCommand(
+    //     new RunCommand(
+    //         () -> test.drive(
+    //             -MathUtil.applyDeadband(joystick.getRawAxis(1), OIConstants.kDriveDeadband),
+    //             -MathUtil.applyDeadband(joystick.getRawAxis(0), OIConstants.kDriveDeadband),
+    //             -MathUtil.applyDeadband(joystick.getRawAxis(2), OIConstants.kDriveDeadband),
+    //             true, true),
+    //             test));
 
 
 

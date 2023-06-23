@@ -17,6 +17,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.utils.*;
@@ -79,6 +80,8 @@ public class SUB_Drivetrain extends SubsystemBase {
     Logger.getInstance().recordOutput("Steering Velocity", backLeft.getVelocitySteer());
     Logger.getInstance().recordOutput("Driving Velocity", backRight.getVelocityDrive());
     Logger.getInstance().recordOutput("Steering Velocity", backRight.getVelocitySteer());
+
+    //SmartDashboard.putNumber("Front Left Angle", frontLeft.);
 
 
     m_odometry.update(
