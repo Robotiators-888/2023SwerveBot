@@ -11,13 +11,15 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Subsystems.SUB_Drivetrain;
-import frc.robot.Subsystems.SUB_SwerveModuleTest;
+import frc.robot.utils.AutoBuilder;
 
-public class RobotContainer {
+public class RobotContainer{
 
-  SUB_Drivetrain drivetrain = new SUB_Drivetrain();
-  //SUB_SwerveModuleTest test = new SUB_SwerveModuleTest();
+  public static SUB_Drivetrain drivetrain = new SUB_Drivetrain();
+
   Joystick joystick = new Joystick(0);
+
+  private AutoBuilder autoBuilder = new AutoBuilder(drivetrain);
 
   public RobotContainer() {
     configureBindings();
@@ -41,7 +43,7 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(joystick.getRawAxis(1), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(joystick.getRawAxis(0), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(joystick.getRawAxis(4), OIConstants.kDriveDeadband),
-                false, true),
+                true, true),
                 drivetrain));
 
     // test.setDefaultCommand(
@@ -60,6 +62,6 @@ public class RobotContainer {
   private void configureBindings() {}
 
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return autoBuilder.getSelectedAuto();
   }
 }
