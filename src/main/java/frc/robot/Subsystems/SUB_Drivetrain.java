@@ -24,6 +24,7 @@ import frc.robot.utils.*;
 
 public class SUB_Drivetrain extends SubsystemBase {
   /** Creates a new Drivetrain. */
+  LogiUtils logiUtils = new LogiUtils(0);
   private final MAXSwerveModule frontLeft 
     = new MAXSwerveModule(Constants.Drivetrain.kFRONT_LEFT_DRIVE_MOTOR_CANID, 
     Constants.Drivetrain.kFRONT_LEFT_STEER_MOTOR_CANID, Constants.Drivetrain.kFrontLeftChassisAngularOffset);
@@ -69,6 +70,7 @@ public class SUB_Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Left Trigger", logiUtils.getLeftTriggerAxis());
 
     Logger.getInstance().recordOutput("Drivetrain/Robot Pose", m_odometry.getPoseMeters());
 

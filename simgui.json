@@ -34,20 +34,14 @@
     }
   },
   "NetworkTables": {
-    "Persistent Values": {
-      "open": false
-    },
-    "Retained Values": {
-      "open": false
-    },
-    "Transitory Values": {
-      "open": false
-    },
     "transitory": {
       "LiveWindow": {
         "open": true
       },
       "Shuffleboard": {
+        "open": true
+      },
+      "SmartDashboard": {
         "open": true
       }
     }
@@ -55,14 +49,11 @@
   "NetworkTables Info": {
     "visible": true
   },
-  "NetworkTables View": {
-    "visible": false
-  },
   "Plot": {
     "Plot <0>": {
       "plots": [
         {
-          "height": 338,
+          "height": 0,
           "series": [
             {
               "color": [
