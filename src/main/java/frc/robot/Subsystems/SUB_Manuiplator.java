@@ -4,10 +4,12 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.utils.LogiUtils;
+
+
 
 public class SUB_Manuiplator extends SubsystemBase {
     private final CANSparkMax Extend = new CANSparkMax(Constants.Manuiplator.kMANUIP_EXTEND_MOTOR_CANID, MotorType.kBrushless);
@@ -16,4 +18,12 @@ public class SUB_Manuiplator extends SubsystemBase {
     
     
 
-    }
+    public void periodic(){
+        LogiUtils logiUtils = new LogiUtils(1);
+        boolean leftBumper = logiUtils.getLeftBumperButtonPressed();
+
+if (leftBumper = true){
+
+}
+   }
+}
