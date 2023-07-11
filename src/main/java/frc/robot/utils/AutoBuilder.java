@@ -8,6 +8,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 import frc.robot.Subsystems.SUB_Drivetrain;
 
+
+/**
+ * This utility class is built for selecting made autos
+ */
 public class AutoBuilder {
     SUB_Drivetrain drivetrain;
     private final SendableChooser<Command> chooser = new SendableChooser<>();
@@ -52,6 +56,9 @@ public class AutoBuilder {
 
     }
 
+    /**
+     * @return Returns chosen auto on Smartdashboard
+     */
     public Command getSelectedAuto(){
         return chooser.getSelected();
     }

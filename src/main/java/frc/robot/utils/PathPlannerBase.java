@@ -19,6 +19,9 @@ import frc.robot.RobotContainer;
 import frc.robot.Constants.Drivetrain;
 import frc.robot.Subsystems.SUB_Drivetrain;
 
+/**
+ * Util class for all Path Planner auto builders/generators
+ */
 public class PathPlannerBase {
     
 
@@ -26,6 +29,12 @@ public class PathPlannerBase {
     final static PathConstraints constraints = new PathConstraints(2, 2);
 
 
+    /**
+     * Generates a usable pathplanner trajectory
+     * @param plannerFile Name of the file without file type
+     * @param reversed is the robot reversed?
+     * @return Returns path planner trajectory for routine
+     */
     public static PathPlannerTrajectory getTrajectory(String plannerFile, boolean reversed) {
         PathPlannerTrajectory trajectoryPath;
             trajectoryPath = PathPlanner.loadPath(plannerFile, constraints, reversed); //Filesystem.getDeployDirectory().toPath().resolve(plannerFile);
@@ -34,6 +43,12 @@ public class PathPlannerBase {
         return trajectoryPath;
     }
     
+    /**
+     * Creates a follow only drive command
+     * @param traj Pathplanner trajectory
+     * @param isFirstPath Is it the first path of the routine, if not it will find relative position to start
+     * @return Returns command for only following the path no events
+     */
     public static Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
         return new SequentialCommandGroup(
              new InstantCommand(() -> {
@@ -56,6 +71,11 @@ public class PathPlannerBase {
          );
      }
 
+     /**
+      * Generates an auto routine 
+      * @param traj pathplanner path
+      * @return Returns auto routine with no events
+      */
      public static Command generateAuto(PathPlannerTrajectory traj){
         SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(drivetrain::getPose, 
             drivetrain::resetOdometry,
@@ -68,6 +88,12 @@ public class PathPlannerBase {
          return autoBuilder.fullAuto(traj);
      }
 
+     /**
+      * Generates an auto routine
+      * @param eventMap Event map of all the events during the routine
+      * @param traj Pathplanner path
+      * @return returns an auto routine with events
+      */
      public static Command generateAuto(HashMap<String, Command> eventMap, PathPlannerTrajectory traj){
         
         SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(drivetrain::getPose, 
@@ -82,6 +108,13 @@ public class PathPlannerBase {
 
     }
 
+    /**
+      * Generates an auto routine
+      * @param eventMap Event map of all the events during the routine
+      * @param traj Pathplanner path
+      * @param stopEvent Stop event with actions the for the robot to perform
+      * @return returns an auto routine with events and stop events
+      */
     public static Command generateAuto(HashMap<String, Command> eventMap, PathPlannerTrajectory traj, StopEvent stopEvent){
         
         SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(drivetrain::getPose, 
