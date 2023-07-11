@@ -17,12 +17,14 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.utils.*;
 
 public class SUB_Drivetrain extends SubsystemBase {
+  public final Field2d m_field = new Field2d();
   /** Creates a new Drivetrain. */
   private final MAXSwerveModule frontLeft 
     = new MAXSwerveModule(Constants.Drivetrain.kFRONT_LEFT_DRIVE_MOTOR_CANID, 
@@ -41,6 +43,7 @@ public class SUB_Drivetrain extends SubsystemBase {
     Constants.Drivetrain.kBACK_RIGHT_STEER_MOTOR_CANID, Constants.Drivetrain.kBackRightChassisAngularOffset);    
 
   AHRS navx = new AHRS();
+  
 
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
@@ -54,7 +57,7 @@ public class SUB_Drivetrain extends SubsystemBase {
  // Odometry class for tracking robot pose
  SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
   Constants.Drivetrain.kDriveKinematics,
-  Rotation2d.fromDegrees(navx.getAngle()),
+  Rotation2d.fromDegrees(-navx.getAngle()),
   new SwerveModulePosition[] {
       frontLeft.getPosition(),
       frontRight.getPosition(),
@@ -68,6 +71,15 @@ public class SUB_Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
+    m_odometry.update(
+      Rotation2d.fromDegrees(-navx.getAngle()),
+      new SwerveModulePosition[] {
+          frontLeft.getPosition(),
+          frontRight.getPosition(),
+          backLeft.getPosition(),
+          backRight.getPosition()
+      });
+    m_field.setRobotPose(m_odometry.getPoseMeters());   
     // This method will be called once per scheduler run
 
     Logger.getInstance().recordOutput("Drivetrain/Robot Pose", m_odometry.getPoseMeters());
@@ -84,14 +96,9 @@ public class SUB_Drivetrain extends SubsystemBase {
     //SmartDashboard.putNumber("Front Left Angle", frontLeft.);
 
 
-    m_odometry.update(
-      Rotation2d.fromDegrees(navx.getAngle()),
-      new SwerveModulePosition[] {
-          frontLeft.getPosition(),
-          frontRight.getPosition(),
-          backLeft.getPosition(),
-          backRight.getPosition()
-      });
+    SmartDashboard.putNumber("rotation", getPose().getRotation().getDegrees());
+    SmartDashboard.putData("Field", m_field);
+    SmartDashboard.putNumberArray("Odometry", new double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
   }
 
  /**
@@ -189,7 +196,7 @@ public class SUB_Drivetrain extends SubsystemBase {
 
     var swerveModuleStates = Constants.Drivetrain.kDriveKinematics.toSwerveModuleStates(
       fieldRelative
-          ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(navx.getAngle()))
+          ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(-navx.getAngle()))
           : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
   SwerveDriveKinematics.desaturateWheelSpeeds(
       swerveModuleStates, Constants.Drivetrain.kMaxSpeedMetersPerSecond);
@@ -242,11 +249,12 @@ public class SUB_Drivetrain extends SubsystemBase {
    * @return the robot's heading in degrees, from -180 to 180
    */
   public double getHeading() {
-    return Rotation2d.fromDegrees(navx.getAngle()).getDegrees();
+    return Rotation2d.fromDegrees(-navx.getAngle()).getDegrees();
   }
 
   /**
    * Returns the turn rate of the robot.
+   *
    *
    * @return The turn rate of the robot, in degrees per second
    */
