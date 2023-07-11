@@ -101,14 +101,14 @@ public final class Constants{
     public static final double kMaxSpeedMetersPerSecond = 4.8;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
-    public static final double kDirectionSlewRate = 1.2; // radians per second
-    public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)
+    public static final double kDirectionSlewRate = 100000; // radians per second
+    public static final double kMagnitudeSlewRate = 100000; // percent per second (1 = 100%)
     public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
 
     // Chassis configuration
-    public static final double kTrackWidth = Units.inchesToMeters(26.5);
+    public static final double kTrackWidth = Units.inchesToMeters(23);
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = Units.inchesToMeters(26.5);
+    public static final double kWheelBase = Units.inchesToMeters(28);
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -122,12 +122,8 @@ public final class Constants{
     public static final double kBackLeftChassisAngularOffset = Math.PI;
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
-    // public static final double kFrontLeftChassisAngularOffset = 0;
-    // public static final double kFrontRightChassisAngularOffset = 0;
-    // public static final double kBackLeftChassisAngularOffset = 0;
-    // public static final double kBackRightChassisAngularOffset = 0;
 
-    public static final boolean kGyroReversed = false;
+    public static final boolean kGyroReversed = true;
     }
  
     public static class Manuiplator{
