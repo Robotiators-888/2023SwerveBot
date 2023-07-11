@@ -127,9 +127,13 @@ public final class Constants{
     }
  
     public static class Manuiplator{
-public static final int kMANUIP_ROTATE_MOTOR_CANID = 31;
-public static final int kMANUIP_INTAKE_MOTOR_CANID = 32;
-public static final int kMANUIP_EXTEND_MOTOR_CANID = 33;
+        public static final int kMANUIP_ROTATE_MOTOR_CANID = 31;
+        public static final int kMANUIP_INTAKE_MOTOR_CANID = 32;
+        public static final int kMANUIP_EXTEND_MOTOR_CANID = 33;
+
+        public static final double INTAKE_CONE_SPEED = 0.65;
+        public static final double INTAKE_CUBE_SPEED = 0.55;
+
     }
 
     }
