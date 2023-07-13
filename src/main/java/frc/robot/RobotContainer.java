@@ -7,13 +7,12 @@ package frc.robot;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Subsystems.SUB_Drivetrain;
 import frc.robot.utils.AutoBuilder;
 
-public class RobotContainer{
+public class RobotContainer {
 
   public static SUB_Drivetrain drivetrain = new SUB_Drivetrain();
 
@@ -26,7 +25,7 @@ public class RobotContainer{
 
     // Configure default commands
 
-    //Flight Controller
+    // Flight Controller
     // drivetrain.setDefaultCommand(
     //     new RunCommand(
     //         () -> drivetrain.drive(
@@ -39,12 +38,14 @@ public class RobotContainer{
     // Logi Controller
     drivetrain.setDefaultCommand(
         new RunCommand(
-            () -> drivetrain.drive(
-                -MathUtil.applyDeadband(joystick.getRawAxis(1), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(joystick.getRawAxis(0), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(joystick.getRawAxis(4), OIConstants.kDriveDeadband),
-                true, true),
-                drivetrain));
+            () ->
+                drivetrain.drive(
+                    -MathUtil.applyDeadband(joystick.getRawAxis(1), OIConstants.kDriveDeadband),
+                    -MathUtil.applyDeadband(joystick.getRawAxis(0), OIConstants.kDriveDeadband),
+                    -MathUtil.applyDeadband(joystick.getRawAxis(4), OIConstants.kDriveDeadband),
+                    true,
+                    true),
+            drivetrain));
 
     // test.setDefaultCommand(
     //     new RunCommand(
@@ -54,8 +55,6 @@ public class RobotContainer{
     //             -MathUtil.applyDeadband(joystick.getRawAxis(2), OIConstants.kDriveDeadband),
     //             true, true),
     //             test));
-
-
 
   }
 
