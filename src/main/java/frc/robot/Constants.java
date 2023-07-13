@@ -134,6 +134,7 @@ public final class Constants{
         public static final double INTAKE_CONE_SPEED = 0.65;
         public static final double INTAKE_CUBE_SPEED = 0.55;
 
+        public static final TrapezoidProfile.Constraints kPivotConstraint = new TrapezoidProfile.Constraints(3.16, 5);
     }
 
     }
