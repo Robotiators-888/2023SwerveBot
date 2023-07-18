@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.robot.Subsystems.SUB_Manuiplator;
 
 public final class Constants{
 
@@ -135,6 +136,7 @@ public final class Constants{
         public static final double INTAKE_CUBE_SPEED = 0.55;
 
         public static final TrapezoidProfile.Constraints kPivotConstraint = new TrapezoidProfile.Constraints(3.16, 5);
+
     }
 
     }

@@ -1,11 +1,24 @@
 package frc.robot.utils;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 // To Import This Class Use: LogiUtils logiUtils = new LogiUtils("Your Controller USB Port #");
 /**
  * Wrapper Class For Logitech F310 Controller
  */
 public class LogiUtils extends Joystick {
+    private JoystickButton AButton;
+    private JoystickButton BButton;
+    private JoystickButton XButton;
+    private JoystickButton YButton;
+    private JoystickButton startButton;
+    private JoystickButton backButton;
+    private JoystickButton leftButton;
+    private JoystickButton rightButton;
+    private JoystickButton leftJoystickPress;
+    private JoystickButton rightJoystickPress;
+
+
   /**
    * List of Axies and Their Corresponding Numbers 
    */
@@ -56,116 +69,78 @@ public class LogiUtils extends Joystick {
      */
     public LogiUtils(int port){
         super(port);
+        AButton = new JoystickButton(this, button.kABUTTON.value); 
+        BButton = new JoystickButton(this, button.kBBUTTON.value);
+        XButton = new JoystickButton(this, button.kXBUTTON.value);
+        YButton = new JoystickButton(this, button.kYBUTTON.value);
+        leftButton = new JoystickButton(this, button.kYBUTTON.value);
+        rightButton = new JoystickButton(this, button.kYBUTTON.value);
+        startButton = new JoystickButton(this, button.kSTARTBUTTON.value);
+        backButton = new JoystickButton(this, button.kBACKBUTTON.value);
+        leftJoystickPress = new JoystickButton(this, button.kLEFTJOYSTICKPRESS.value);
+        rightJoystickPress = new JoystickButton(this, button.kRIGHTJOYSTICKPRESS.value);
     }
-    /**
-     * 
-     * @return A Boolean Value That Corresponds to The State of The Controler A Button
-     */
-    public boolean getAButtonPressed(){
-        return getRawButton(button.kABUTTON.value);
+    
+    public JoystickButton getAButtonPressed(){
+        return AButton;
     }       
-    /**
-     * 
-     * @return A Boolean Value That Corresponds to The State of The Controler B Button
-     */
-    public boolean getBButtonPressed(){
-        return getRawButton(button.kBBUTTON.value);
+    
+    public JoystickButton getBButtonPressed(){
+        return BButton;
     } 
-    /**
-     * 
-     * @return A Boolean Value That Corresponds to The State of The Controler X Button
-     */
-    public boolean getXButtonPressed(){
-        return getRawButton(button.kXBUTTON.value);
+    
+    public JoystickButton getXButtonPressed(){
+        return XButton;
     }     
-    /**
-     * 
-     * @return A Boolean Value That Corresponds to The State of The Controler Y Button
-     */        
-    public boolean getYButtonPressed(){
-        return getRawButton(button.kYBUTTON.value);
+          
+    public JoystickButton getYButtonPressed(){
+        return YButton;
     }       
-    /**
-     * 
-     * @return A Boolean Value That Corresponds to The State of The Controler Left Bumper Button
-     */        
-    public boolean getLeftBumperButtonPressed(){
-        return getRawButton(button.kLEFTBUMPER.value);
+          
+    public JoystickButton getLeftBumperButtonPressed(){
+        return leftButton;
     }   
-    /**
-     * 
-     * @return A Boolean Value That Corresponds to The State of The Controler Right Bumper Button
-     */   
-    public boolean getRightBumperButtonPressed(){
-        return getRawButton(button.kRIGHTBUMPER.value);
+    
+    public JoystickButton getRightBumperButtonPressed(){
+        return rightButton;
     }  
-    /**
-     * 
-     * @return A Boolean Value That Corresponds to The State of The Controler Start Button On The Front of The Controller
-     */            
-    public boolean getStartButtonPressed(){
-        return getRawButton(button.kSTARTBUTTON.value);
+          
+    public JoystickButton getStartButtonPressed(){
+        return startButton;
     }   
-    /**
-     * 
-     * @return A Boolean Value That Corresponds to The State of The Controler Back Button On The Front of The Controller
-     */      
-    public boolean getBackButtonPressed(){
-        return getRawButton(button.kBACKBUTTON.value);
+       
+    public JoystickButton getBackButtonPressed(){
+        return backButton;
     }      
-    /**
-     * 
-     * @return A Boolean Value That Corresponds to The State of The Controler Left Joystick Press Sensor
-     */   
-    public boolean getLeftJoystickButtonPressed(){
-        return getRawButton(button.kLEFTJOYSTICKPRESS.value);
+     
+    public JoystickButton getLeftJoystickButtonPressed(){
+        return leftJoystickPress;
     }       
-    /**
-     * 
-     * @return A Boolean Value That Corresponds to The State of The Controler Right Joystick Press Sensor
-     */   
-    public boolean getRightJoystickButtonPressed(){
-        return getRawButton(button.kRIGHTJOYSTICKPRESS.value);
+     
+    public JoystickButton getRightJoystickButtonPressed(){
+        return rightJoystickPress;
     }  
-    /**
-     * 
-     * @return A Double Value That Corresponds to The X Axis Value of The Left Controller Joystick
-     */   
+     
     public double getLeftXAxis(){
         return getRawAxis(axis.kLEFTX.value);
     }
-    /**
-     * 
-     * @return A Double Value That Corresponds to The Y Axis Value of The Left Controller Joystick
-     */  
+      
     public double getLeftYAxis(){
         return getRawAxis(axis.kLEFTY.value);
     }
-    /**
-     * 
-     * @return A Double Value That Corresponds to The X Axis Value of The Right Controller Joystick
-     */  
+    
     public double getRightXAxis(){
         return getRawAxis(axis.kRIGHTX.value);
     }
-    /**
-     * 
-     * @return A Double Value That Corresponds to The Y Axis Value of The Right Controller Joystick
-     */  
+    
     public double getRightYAxis(){
         return getRawAxis(axis.kRIGHTY.value);
     }
-    /**
-     * 
-     * @return A Double Value That Corresponds to The Axis Value of The Left Bumper
-     */  
+  
     public double getLeftTriggerAxis(){
         return getRawAxis(axis.kLEFTTRIIGER.value);
     }
-    /**
-     * 
-     * @return A Double Value That Corresponds to The Axis Value of The Right Bumper
-     */  
+   
     public double getRightTriggerAxis(){
         return getRawAxis(axis.kRIGHTTRIGGER.value);
     }

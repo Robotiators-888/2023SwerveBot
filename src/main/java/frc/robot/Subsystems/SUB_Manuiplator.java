@@ -2,6 +2,10 @@ package frc.robot.Subsystems;
 
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import java.util.function.Supplier;
+
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
@@ -21,6 +25,12 @@ public class SUB_Manuiplator extends SubsystemBase {
     private final TalonSRX intakeMotor = new TalonSRX(Constants.Manuiplator.kMANUIP_INTAKE_MOTOR_CANID);    
     
     
+
+    public void rotateArm(double speed){
+
+        Rotate.set(speed);
+    }
+
 
     
     private TrapezoidProfile m_profile;
@@ -79,7 +89,7 @@ public class SUB_Manuiplator extends SubsystemBase {
       targetState = m_profile.calculate(elapsedTime);
     }
 
-    feedforward = Constants.Arm.kArmFeedforward.calculate(m_encoder.getPosition()+Constants.Arm.kArmZeroCosineOffset, targetState.velocity);
+    //feedforward = Constants.Arm.kArmFeedforward.calculate(m_encoder.getPosition()+Constants.Arm.kArmZeroCosineOffset, targetState.velocity);
     m_controller.setReference(targetState.position, CANSparkMax.ControlType.kPosition, 0, feedforward);
   }
   public void runManual(double _power) {
@@ -88,7 +98,7 @@ public class SUB_Manuiplator extends SubsystemBase {
     targetState = new TrapezoidProfile.State(m_setpoint, 0.0);
     m_profile = new TrapezoidProfile(Constants.Manuiplator.kPivotConstraint, targetState, targetState);
     //update the feedforward variable with the newly zero target velocity
-    feedforward = Constants.Manuiplator.kArmFeedforward.calculate(m_encoder.getPosition()+Constants.Manuiplator.kArmZeroCosineOffset, targetState.velocity);
+    //feedforward = Constants.Manuiplator.kArmFeedforward.calculate(m_encoder.getPosition()+Constants.Manuiplator.kArmZeroCosineOffset, targetState.velocity);
     Rotate.set(_power + (feedforward / 12.0));
     manualValue = _power;
   }
