@@ -23,7 +23,7 @@ import frc.robot.utils.LogiUtils;
 public class RobotContainer {
   
 
-  SUB_Drivetrain drivetrain = new SUB_Drivetrain();
+  public static SUB_Drivetrain drivetrain = new SUB_Drivetrain();
   SUB_Manuiplator manuiplator = new SUB_Manuiplator();
   //SUB_SwerveModuleTest test = new SUB_SwerveModuleTest();
   Joystick joystick = new Joystick(0);
@@ -90,6 +90,10 @@ public class RobotContainer {
 
   public Command getAutonmousCommand(){
     return autoBuilder.getSelectedAuto();
+  }
+
+  public Command getAutonomousCommand() {
+    return null;
   }
   
 }
