@@ -82,8 +82,8 @@ public class RobotContainer {
     //             true, true),
     //             test));
     
-    leftBumper.whileTrue(new InstantCommand(()->manuiplator.rotateArm(0)));
-    rightBumper.whileTrue(new InstantCommand(()->manuiplator.rotateArm(0)));
+    leftBumper.whileTrue(new InstantCommand(()->manuiplator.rotateArm(.25)));
+    rightBumper.whileTrue(new InstantCommand(()->manuiplator.rotateArm(-.25)));
     new Trigger(()->(!leftBumper.getAsBoolean() && !rightBumper.getAsBoolean())).onTrue(new InstantCommand(()->manuiplator.rotateArm(0)));
 
   }

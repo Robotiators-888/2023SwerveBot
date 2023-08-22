@@ -6,14 +6,18 @@ import java.util.function.Supplier;
 
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.REVLibError;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -23,7 +27,7 @@ public class SUB_Manuiplator extends SubsystemBase {
     private final CANSparkMax Extend = new CANSparkMax(Constants.Manuiplator.kMANUIP_EXTEND_MOTOR_CANID, MotorType.kBrushless);
     private final CANSparkMax Rotate = new CANSparkMax(Constants.Manuiplator.kMANUIP_ROTATE_MOTOR_CANID, MotorType.kBrushless);
     private final TalonSRX intakeMotor = new TalonSRX(Constants.Manuiplator.kMANUIP_INTAKE_MOTOR_CANID);    
-    
+    private final SparkMaxAbsoluteEncoder rotateEncoder = Rotate.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
     
 
     public void rotateArm(double speed){
@@ -54,7 +58,6 @@ public class SUB_Manuiplator extends SubsystemBase {
     }
     
     public void periodic(){
-
    }
 
    public void driveMotor(int motor, double speed){
