@@ -54,7 +54,7 @@ public class RobotContainer {
     //             drivetrain));
 
     // Logi Controller
-    manuiplator.setDefaultCommand(new RunCommand(() -> {manuiplator.armMoveVoltage(0);},manuiplator));
+    manuiplator.setDefaultCommand(new RunCommand(() -> {manuiplator.armMoveVoltage(-3);},manuiplator));
     
     drivetrain.setDefaultCommand(
         new RunCommand(

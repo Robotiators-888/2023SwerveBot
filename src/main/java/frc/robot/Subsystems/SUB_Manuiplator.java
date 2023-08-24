@@ -52,7 +52,6 @@ public class SUB_Manuiplator extends SubsystemBase {
     private double feedforward;
     private double manualValue;
 
-    PIDController pid = new PIDController(Constants.Manuiplator.PID_kP, Constants.Manuiplator.PID_kI, Constants.Manuiplator.PID_kD);
     double setpoint = Constants.Manuiplator.kGroundPosition;
     //Counteract Gravity on Arm, Currently lbsArm is arbitrary (For kG of FF)
     double lbsArm = 30.0;
@@ -63,15 +62,18 @@ public class SUB_Manuiplator extends SubsystemBase {
         rotateMotor.setInverted(false);
         rotateMotor.setIdleMode(IdleMode.kBrake);
         m_encoder = rotateMotor.getAbsoluteEncoder(Type.kDutyCycle);
+        m_controller = rotateMotor.getPIDController();
         m_timer = new Timer();
         m_timer.start();
         m_timer.reset(); 
-
+        setLimits();
     }
 
         
     public void periodic(){
       SmartDashboard.putNumber("setpoint", setpoint);
+      SmartDashboard.putNumber("VelocityEncoder", m_encoder.getVelocity());
+      SmartDashboard.putNumber("PositionEncoder", m_encoder.getPosition());
    }
 
    public void driveMotor(int motor, double speed){
@@ -82,7 +84,18 @@ public class SUB_Manuiplator extends SubsystemBase {
         }
    }
 
+   public void setLimits(){
+    //set soft limits and current limits for how far the manip can move
+    rotateMotor.setSmartCurrentLimit(40, 20);}
+    
+  //   rotateMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+  //   rotateMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
 
+  //   // stops motor at 130 encoder clicks, (touching the ground)
+  //   rotateMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 2048);
+  //   // stops motor at 0 encoder clicks when reversing, (touching the robot)
+  //   rotateMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 8);
+  //  }
    public void setTargetPosition(double setpoint, SUB_Manuiplator manip){
         if (setpoint != m_setpoint){
             m_setpoint = setpoint;
@@ -91,7 +104,8 @@ public class SUB_Manuiplator extends SubsystemBase {
    }
 
    private void updateMotionProfile() {
-    TrapezoidProfile.State state = new TrapezoidProfile.State(m_encoder.getPosition(), m_encoder.getVelocity());
+    TrapezoidProfile.State state = new TrapezoidProfile.State(m_encoder.getPosition()
+    , m_encoder.getVelocity());
     TrapezoidProfile.State goal = new TrapezoidProfile.State(m_setpoint, 0.0);
     m_profile = new TrapezoidProfile(Constants.Manuiplator.kArmMotionConstraint, goal, state);
     m_timer.reset();

@@ -150,11 +150,11 @@ public final class Constants{
         public static final ArmFeedforward kArmFeedforward = new ArmFeedforward(FF_kS, FF_kG, FF_kV, FF_kA);
 
         //public static final double kGroundPosition = 0.1;
-        public static final double kGroundPosition = .31;
-        public static final double kScoreHigh = .35;
-        public static final double kScoreMid = .31;
-        public static final double kStow = .675;
-        public static final double kSingleFeeder = 0.355;
+        public static final double kGroundPosition = .02;
+        public static final double kScoreHigh = .375;
+        public static final double kScoreMid = .335;
+        public static final double kStow = .7;
+        public static final double kSingleFeeder = 0.38;
         
 
         public static final double kmaxVelocity = 6.47*Math.PI;
