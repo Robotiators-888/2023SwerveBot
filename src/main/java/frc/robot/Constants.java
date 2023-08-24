@@ -2,9 +2,11 @@ package frc.robot;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Subsystems.SUB_Manuiplator;
 
@@ -35,7 +37,7 @@ public final class Constants{
         / kDrivingMotorReduction) / 60.0; // meters per second
 
     public static final double kTurningEncoderPositionFactor = (2 * Math.PI); // radians
-    public static final double kTurningEncoderVelocityFactor = (2 * Math.PI) / 60.0; // radians per second
+    public static final double kTurningVelocityFactor = (2 * Math.PI) / 60.0; // radians per second
 
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
@@ -135,8 +137,29 @@ public final class Constants{
         public static final double INTAKE_CONE_SPEED = 0.65;
         public static final double INTAKE_CUBE_SPEED = 0.55;
 
-        public static final TrapezoidProfile.Constraints kPivotConstraint = new TrapezoidProfile.Constraints(3.16, 5);
+        public static final double PID_kP = 0.11425;
+        public static final int PID_kI = 0;
+        public static final double PID_kD = 0;
+        public static final double FF_kA = .1267;
+        public static final double FF_kG = .4847; //amount of volts to Overcome gravity on the arm, was 1
+        public static final double FF_kS = .11092;
+        public static final double FF_kV = 5.9339; 
+        public static final double FF_Velocity = 0.90511;
+        public static final double FF_Accel = 0.68018;
+        public static final TrapezoidProfile.Constraints kArmMotionConstraint = new TrapezoidProfile.Constraints(3.47, 5);
+        public static final ArmFeedforward kArmFeedforward = new ArmFeedforward(FF_kS, FF_kG, FF_kV, FF_kA);
 
+        //public static final double kGroundPosition = 0.1;
+        public static final double kGroundPosition = .31;
+        public static final double kScoreHigh = .35;
+        public static final double kScoreMid = .31;
+        public static final double kStow = .675;
+        public static final double kSingleFeeder = 0.355;
+        
+
+        public static final double kmaxVelocity = 6.47*Math.PI;
+        public static final double kmaxAcceleration = 4.27;
+        
     }
 
     }

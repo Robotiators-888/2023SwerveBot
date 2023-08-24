@@ -31,6 +31,10 @@ public class RobotContainer {
   LogiUtils logiUtils1 = new LogiUtils(1);
   JoystickButton leftBumper = logiUtils1.getLeftBumperButtonPressed();
   JoystickButton rightBumper = logiUtils1.getRightBumperButtonPressed();
+  JoystickButton aButton = logiUtils1.getAButtonPressed(); //Ground
+  JoystickButton yButton = logiUtils1.getYButtonPressed(); //Stow/up
+  JoystickButton xButton = logiUtils1.getXButtonPressed(); //Single Feed
+  JoystickButton bButton = logiUtils1.getBButtonPressed(); // High, colin is high
 
   private AutoBuilder autoBuilder = new AutoBuilder(drivetrain);
 
@@ -50,7 +54,7 @@ public class RobotContainer {
     //             drivetrain));
 
     // Logi Controller
-    
+    manuiplator.setDefaultCommand(new RunCommand(() -> {manuiplator.armMoveVoltage(0);},manuiplator));
     
     drivetrain.setDefaultCommand(
         new RunCommand(
@@ -69,8 +73,17 @@ public class RobotContainer {
         new RunCommand(()->manuiplator.driveMotor(1, Math.pow(DriverC.getRawAxis(2),2)-Math.pow(DriverC.getRawAxis(3), 2)), 
         manuiplator));
     
-    rightBumper.onTrue(new RunCommand(()->manuiplator.driveMotor(3, Constants.Manuiplator.INTAKE_CONE_SPEED), manuiplator));
+        
     
+    
+        rightBumper.onTrue(new RunCommand(()->manuiplator.driveMotor(3, Constants.Manuiplator.INTAKE_CONE_SPEED), manuiplator));
+    
+
+    aButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(0, manuiplator)));
+    bButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kScoreHigh, manuiplator)));
+    yButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kStow, manuiplator)));
+    xButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kSingleFeeder, manuiplator)));
+
     
 
     // test.setDefaultCommand(
@@ -85,6 +98,7 @@ public class RobotContainer {
     leftBumper.whileTrue(new InstantCommand(()->manuiplator.rotateArm(.25)));
     rightBumper.whileTrue(new InstantCommand(()->manuiplator.rotateArm(-.25)));
     new Trigger(()->(!leftBumper.getAsBoolean() && !rightBumper.getAsBoolean())).onTrue(new InstantCommand(()->manuiplator.rotateArm(0)));
+
 
   }
 
