@@ -14,9 +14,9 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Subsystems.SUB_Drivetrain;
+import frc.robot.Subsystems.SUB_Intake;
 import frc.robot.Subsystems.SUB_Manuiplator;
 import frc.robot.utils.AutoBuilder;
- 
 import frc.robot.utils.LogiUtils;
 
 public class RobotContainer {
@@ -55,6 +55,7 @@ public class RobotContainer {
                 drivetrain));
   }
 
+
   private void configureBindings() {
     // new Trigger(
     //   ()->(Math.abs(Math.pow(DriverC.getRawAxis(2),2)-Math.pow(DriverC.getRawAxis(3), 2)) > 0.1))
@@ -73,9 +74,9 @@ public class RobotContainer {
     yButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kStow, manuiplator)));
     xButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kSingleFeeder, manuiplator)));
 
-    // leftBumper.onTrue(new InstantCommand(()->manuiplator.intakeIn(),manuiplator));
-    // rightBumper.onTrue(new InstantCommand(()->manuiplator.intakeOut(),manuiplator));
-    // new Trigger(()->(!leftBumper.getAsBoolean() && !rightBumper.getAsBoolean())).onFalse(new InstantCommand(()->manuiplator.intakeStop()));
+    leftBumper.onTrue(new InstantCommand(()->SUB_Intake.intakeIn(),manuiplator));
+    rightBumper.onTrue(new InstantCommand(()->SUB_Intake.intakeOut(),manuiplator));
+    intake.setDefaultCommand(new RunCommand(()-> {Intake.intakeStop();},manuiplator));
 
     //manuiplator.setDefaultCommand(new RunCommand(()-> {manuiplator.armMoveVoltage(Constants.Manuiplator.kArmFeedforward);},manuiplator));
     manuiplator.setDefaultCommand(new RunCommand(()-> manuiplator.runAutomatic(), manuiplator));

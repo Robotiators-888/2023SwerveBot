@@ -31,7 +31,6 @@ import frc.robot.Constants;
 public class SUB_Manuiplator extends SubsystemBase {
     //private final CANSparkMax Extend = new CANSparkMax(Constants.Manuiplator.kMANUIP_EXTEND_MOTOR_CANID, MotorType.kBrushless);
     private final CANSparkMax rotateMotor = new CANSparkMax(Constants.Manuiplator.kMANUIP_ROTATE_MOTOR_CANID, MotorType.kBrushless);
-    private final TalonSRX intakeMotor = new TalonSRX(Constants.Manuiplator.kMANUIP_INTAKE_MOTOR_CANID);    
     public final SparkMaxAbsoluteEncoder rotateEncoder = rotateMotor.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
     private final RelativeEncoder rotateRelativeEncoder = rotateMotor.getEncoder();
     private Timer m_timer;
@@ -42,16 +41,6 @@ public class SUB_Manuiplator extends SubsystemBase {
         
     // }
 
-
-    public void intakeIn(){
-      intakeMotor.set(TalonSRXControlMode.PercentOutput,-.75);
-    }
-    public void intakeOut(){
-      intakeMotor.set(TalonSRXControlMode.PercentOutput,0.75);
-    }
-    public void intakeStop(){
-      intakeMotor.set(TalonSRXControlMode.PercentOutput,0);
-    }
     private TrapezoidProfile m_profile;
     
 
@@ -98,13 +87,13 @@ public class SUB_Manuiplator extends SubsystemBase {
       SmartDashboard.putNumber("AbsEncoder", m_encoder.getPosition());
    }
 
-   public void driveMotor(int motor, double speed){
-        switch(motor){
-            case 1: rotateMotor.set(speed); break;
-            //case 2: Extend.set(speed); break;
-            case 3: intakeMotor.set(TalonSRXControlMode.PercentOutput, speed);
-        }
-   }
+  //  public void driveMotor(int motor, double speed){
+  //       switch(motor){
+  //           case 1: rotateMotor.set(speed); break;
+  //           //case 2: Extend.set(speed); break;
+  //           case 3: intakeMotor.set(TalonSRXControlMode.PercentOutput, speed);
+  //       }
+  //  }
 
    public void setLimits(){
     //set soft limits and current limits for how far the manip can move
@@ -117,7 +106,6 @@ public class SUB_Manuiplator extends SubsystemBase {
     rotateMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float) 1.27);
     // stops motor at 0 encoder clicks when reversing, (touching the robot)
     rotateMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, (float) .07);
-
    }
    public void setTargetPosition(double setpoint, SUB_Manuiplator manip){
         if (setpoint != m_setpoint){
