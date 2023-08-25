@@ -9,17 +9,14 @@ package frc.robot;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Subsystems.SUB_Drivetrain;
 import frc.robot.Subsystems.SUB_Manuiplator;
 import frc.robot.utils.AutoBuilder;
  
-import frc.robot.Subsystems.SUB_SwerveModuleTest;
 import frc.robot.utils.LogiUtils;
 
 public class RobotContainer {
@@ -71,16 +68,17 @@ public class RobotContainer {
     //     rightBumper.onTrue(new RunCommand(()->manuiplator.driveMotor(3, Constants.Manuiplator.INTAKE_CONE_SPEED), manuiplator));
     
 
-    // aButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kGroundPosition, manuiplator)));
-    // bButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kScoreHigh, manuiplator)));
-    // yButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kStow, manuiplator)));
-    // xButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kSingleFeeder, manuiplator)));
+    aButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kGroundPosition, manuiplator)));
+    bButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kScoreHigh, manuiplator)));
+    yButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kStow, manuiplator)));
+    xButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kSingleFeeder, manuiplator)));
 
     // leftBumper.onTrue(new InstantCommand(()->manuiplator.intakeIn(),manuiplator));
     // rightBumper.onTrue(new InstantCommand(()->manuiplator.intakeOut(),manuiplator));
     // new Trigger(()->(!leftBumper.getAsBoolean() && !rightBumper.getAsBoolean())).onFalse(new InstantCommand(()->manuiplator.intakeStop()));
 
-    manuiplator.setDefaultCommand(new RunCommand(()-> {manuiplator.armMoveVoltage(0);},manuiplator));
+    //manuiplator.setDefaultCommand(new RunCommand(()-> {manuiplator.armMoveVoltage(Constants.Manuiplator.kArmFeedforward);},manuiplator));
+    manuiplator.setDefaultCommand(new RunCommand(()-> manuiplator.runAutomatic(), manuiplator));
 
     leftBumperC.whileTrue(new RunCommand(()->manuiplator.armMoveVoltage(-.6),manuiplator));
     RightBumperC.whileTrue(new RunCommand(()->manuiplator.armMoveVoltage(6),manuiplator));
@@ -106,8 +104,6 @@ public class RobotContainer {
     return autoBuilder.getSelectedAuto();
   }
 
-  public Command getAutonomousCommand() {
-    return null;
-  }
+  
   
 }

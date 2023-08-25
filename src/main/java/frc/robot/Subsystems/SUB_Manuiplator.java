@@ -15,6 +15,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
+import com.revrobotics.SparkMaxPIDController.ArbFFUnits;
 import com.revrobotics.REVLibError;
 
 import frc.libs.PIDGains;
@@ -77,10 +78,9 @@ public class SUB_Manuiplator extends SubsystemBase {
         rotateRelativeEncoder.setPositionConversionFactor(1.0/(300.0)*2*Math.PI);
         rotateRelativeEncoder.setPosition(m_encoder.getPosition());
         m_controller = rotateMotor.getPIDController();
-        PIDGains.setSparkMaxGains(m_controller, Constants.Manuiplator.kArmPositionGains);
+        PIDGains.setSparkMaxGains(m_controller, new PIDGains(0, 0, 0));
         m_setpoint = Constants.Manuiplator.kGroundPosition;
         
-
         m_timer = new Timer();
         m_timer.start();
         m_timer.reset(); 
@@ -124,6 +124,7 @@ public class SUB_Manuiplator extends SubsystemBase {
             m_setpoint = setpoint;
             updateMotionProfile();
         }
+        SmartDashboard.putNumber("Arm Setpoint", m_setpoint);
    }
 
    private void updateMotionProfile() {
@@ -159,21 +160,21 @@ public double getRotations(){
     //gets position
     return m_encoder.getPosition();
 }
-  public void runAutomatic() {
-    double elapsedTime = m_timer.get();
-    if (m_profile.isFinished(elapsedTime)) {
-      SmartDashboard.putString("isFinished", "AHHHHH");
-      SmartDashboard.putNumber("setpoint auto", m_setpoint);
-      targetState = new TrapezoidProfile.State(m_setpoint, 0.0);
-      SmartDashboard.putNumber("Target State pos", targetState.position);
-      SmartDashboard.putNumber("Target State velo", targetState.velocity);
-    }
-    else {
-      targetState = m_profile.calculate(elapsedTime);
-    }
-    feedforward = Constants.Manuiplator.kArmFeedforward.calculate(m_encoder.getPosition(), targetState.velocity);
-    m_controller.setReference(targetState.position, CANSparkMax.ControlType.kPosition, 0, feedforward);
-  }
+  // public void runAutomatic() {
+  //   double elapsedTime = m_timer.get();
+  //   if (m_profile.isFinished(elapsedTime)) {
+  //     SmartDashboard.putString("isFinished", "AHHHHH");
+  //     SmartDashboard.putNumber("setpoint auto", m_setpoint);
+  //     targetState = new TrapezoidProfile.State(m_setpoint, 0.0);
+  //     SmartDashboard.putNumber("Target State pos", targetState.position);
+  //     SmartDashboard.putNumber("Target State velo", targetState.velocity);
+  //   }
+  //   else {
+  //     targetState = m_profile.calculate(elapsedTime);
+  //   }
+  //   feedforward = Constants.Manuiplator.kArmFeedforward.calculate(m_encoder.getPosition(), targetState.velocity);
+  //   m_controller.setReference(targetState.position, CANSparkMax.ControlType.kPosition, 0, feedforward);
+  // }
   public void runManual(double _power) {
     //reset and zero out a bunch of automatic mode stuff so exiting manual mode happens cleanly and passively
     m_setpoint = m_encoder.getPosition();
@@ -185,5 +186,15 @@ public double getRotations(){
     manualValue = _power;
   }
 
+  public void runAutomatic(){
+    double elapsedTime = m_timer.get();
+    if(m_profile.isFinished(elapsedTime)){
+      targetState = new TrapezoidProfile.State(m_setpoint, 0.0);
+    }else{
+      targetState = m_profile.calculate(elapsedTime);
+    }
+    feedforward = Constants.Manuiplator.kArmFeedforward.calculate(m_encoder.getPosition(), targetState.velocity);
+    m_controller.setReference(targetState.position, CANSparkMax.ControlType.kPosition, 0, feedforward, ArbFFUnits.kVoltage);
+  }
 
 }

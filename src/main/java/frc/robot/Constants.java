@@ -147,7 +147,7 @@ public final class Constants{
         public static final double FF_kV = 5.9339; 
         public static final double FF_Velocity = 0.90511;
         public static final double FF_Accel = 0.68018;
-        public static final TrapezoidProfile.Constraints kArmMotionConstraint = new TrapezoidProfile.Constraints(3.47, 5);
+        public static final TrapezoidProfile.Constraints kArmMotionConstraint = new TrapezoidProfile.Constraints(0.75, 1);
         public static final ArmFeedforward kArmFeedforward = new ArmFeedforward(FF_kS, FF_kG, FF_kV, FF_kA);
 
         public static final PIDGains kArmPositionGains = new PIDGains(0.6, 0.0, 0.0);
