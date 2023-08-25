@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
+import frc.libs.PIDGains;
 import frc.robot.Subsystems.SUB_Manuiplator;
 
 public final class Constants{
@@ -139,7 +140,7 @@ public final class Constants{
 
         public static final double PID_kP = 0.11425;
         public static final int PID_kI = 0;
-        public static final double PID_kD = 0;
+        public static final double PID_kD = 0.021;
         public static final double FF_kA = .1267;
         public static final double FF_kG = .4847; //amount of volts to Overcome gravity on the arm, was 1
         public static final double FF_kS = .11092;
@@ -149,8 +150,10 @@ public final class Constants{
         public static final TrapezoidProfile.Constraints kArmMotionConstraint = new TrapezoidProfile.Constraints(3.47, 5);
         public static final ArmFeedforward kArmFeedforward = new ArmFeedforward(FF_kS, FF_kG, FF_kV, FF_kA);
 
+        public static final PIDGains kArmPositionGains = new PIDGains(0.6, 0.0, 0.0);
+
         //public static final double kGroundPosition = 0.1;
-        public static final double kGroundPosition = .02;
+        public static final double kGroundPosition = .07;
         public static final double kScoreHigh = .375;
         public static final double kScoreMid = .335;
         public static final double kStow = .7;

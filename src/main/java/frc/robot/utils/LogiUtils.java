@@ -73,8 +73,8 @@ public class LogiUtils extends Joystick {
         BButton = new JoystickButton(this, button.kBBUTTON.value);
         XButton = new JoystickButton(this, button.kXBUTTON.value);
         YButton = new JoystickButton(this, button.kYBUTTON.value);
-        leftButton = new JoystickButton(this, button.kYBUTTON.value);
-        rightButton = new JoystickButton(this, button.kYBUTTON.value);
+        leftButton = new JoystickButton(this, button.kLEFTBUMPER.value);
+        rightButton = new JoystickButton(this, button.kRIGHTBUMPER.value);
         startButton = new JoystickButton(this, button.kSTARTBUTTON.value);
         backButton = new JoystickButton(this, button.kBACKBUTTON.value);
         leftJoystickPress = new JoystickButton(this, button.kLEFTJOYSTICKPRESS.value);
