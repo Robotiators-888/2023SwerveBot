@@ -24,7 +24,7 @@ public class RobotContainer {
 
   public static SUB_Drivetrain drivetrain = new SUB_Drivetrain();
   SUB_Manuiplator manuiplator = new SUB_Manuiplator();
-  //SUB_SwerveModuleTest test = new SUB_SwerveModuleTest();
+
   Joystick joystick = new Joystick(0);
   LogiUtils DriverC = new LogiUtils(0);
   LogiUtils logiUtils1 = new LogiUtils(1);
@@ -76,7 +76,7 @@ public class RobotContainer {
 
     leftBumper.onTrue(new InstantCommand(()->SUB_Intake.intakeIn(),manuiplator));
     rightBumper.onTrue(new InstantCommand(()->SUB_Intake.intakeOut(),manuiplator));
-    intake.setDefaultCommand(new RunCommand(()-> {Intake.intakeStop();},manuiplator));
+    //intake.setDefaultCommand(new RunCommand(()-> {Intake.intakeStop();},manuiplator));
 
     //manuiplator.setDefaultCommand(new RunCommand(()-> {manuiplator.armMoveVoltage(Constants.Manuiplator.kArmFeedforward);},manuiplator));
     manuiplator.setDefaultCommand(new RunCommand(()-> manuiplator.runAutomatic(), manuiplator));
