@@ -2,24 +2,24 @@ package frc.robot;
 
 public class RobotManager {
     public enum TargetScoring{
-        HIGH("High"),
-        MED("Medium"),
-        LOW("Low");
+        HIGH(Constants.Manuiplator.kScoreHigh),
+        MED(Constants.Manuiplator.kScoreMid),
+        LOW(Constants.Manuiplator.kScoreLow);
 
-        private final String height;
-        TargetScoring(final String height){
+        private final double height;
+        TargetScoring(final double height){
             this.height = height;
         }
 
-        public String toString(){
+        public double getValue(){
             return height;
         }
     }
 
-    public RobotManager instance = null;
+    public static RobotManager instance = null;
     private TargetScoring targetScoring;
 
-    public synchronized RobotManager getInstance() {
+    public synchronized static RobotManager getInstance() {
         if(instance == null){
             instance = new RobotManager();
         }
@@ -30,11 +30,9 @@ public class RobotManager {
         targetScoring = TargetScoring.HIGH;
     }
 
-    public String getScoringHeight(){
-
+    public double getScoringHeight(){
+        return targetScoring.getValue();
     }
-
-    public Command build
-    
+   
     
 }

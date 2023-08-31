@@ -8,6 +8,7 @@ package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -23,7 +24,8 @@ public class RobotContainer {
   
 
   public static SUB_Drivetrain drivetrain = new SUB_Drivetrain();
-  SUB_Manuiplator manuiplator = new SUB_Manuiplator();
+  public static SUB_Manuiplator manuiplator = new SUB_Manuiplator();
+  public static RobotManager manager = RobotManager.getInstance();
 
   Joystick joystick = new Joystick(0);
   LogiUtils DriverC = new LogiUtils(0);
@@ -35,7 +37,7 @@ public class RobotContainer {
   JoystickButton aButton = logiUtils1.getAButtonPressed(); //Ground
   JoystickButton yButton = logiUtils1.getYButtonPressed(); //Stow/up
   JoystickButton xButton = logiUtils1.getXButtonPressed(); //Single Feed
-  JoystickButton bButton = logiUtils1.getBButtonPressed(); // High, colin is high
+  JoystickButton bButton = logiUtils1.getBButtonPressed(); //Scoring Height
 
   private AutoBuilder autoBuilder = new AutoBuilder(drivetrain);
 
@@ -55,6 +57,9 @@ public class RobotContainer {
                 drivetrain));
   }
 
+  public void periodic(){
+    SmartDashboard.putNumber("Scoring height", manager.getScoringHeight());
+  }
 
   private void configureBindings() {
     // new Trigger(
@@ -70,7 +75,7 @@ public class RobotContainer {
     
 
     aButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kGroundPosition, manuiplator)));
-    bButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kScoreHigh, manuiplator)));
+    bButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(manager.getScoringHeight(), manuiplator)));
     yButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kStow, manuiplator)));
     xButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kSingleFeeder, manuiplator)));
 
