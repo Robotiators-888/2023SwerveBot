@@ -25,6 +25,7 @@ public class RobotContainer {
 
   public static SUB_Drivetrain drivetrain = new SUB_Drivetrain();
   public static SUB_Manuiplator manuiplator = new SUB_Manuiplator();
+  public static SUB_Intake intake = new SUB_Intake();
   public static RobotManager manager = RobotManager.getInstance();
 
   Joystick joystick = new Joystick(0);
@@ -62,26 +63,14 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    // new Trigger(
-    //   ()->(Math.abs(Math.pow(DriverC.getRawAxis(2),2)-Math.pow(DriverC.getRawAxis(3), 2)) > 0.1))
-    //   .whileTrue(
-    //     new RunCommand(()->manuiplator.driveMotor(1, Math.pow(DriverC.getRawAxis(2),2)-Math.pow(DriverC.getRawAxis(3), 2)), 
-    //    manuiplator));
-    
-        
-    
-    
-    //     rightBumper.onTrue(new RunCommand(()->manuiplator.driveMotor(3, Constants.Manuiplator.INTAKE_CONE_SPEED), manuiplator));
-    
-
     aButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kGroundPosition, manuiplator)));
     bButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(manager.getScoringHeight(), manuiplator)));
     yButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kStow, manuiplator)));
     xButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kSingleFeeder, manuiplator)));
 
-    leftBumper.onTrue(new InstantCommand(()->SUB_Intake.intakeIn(),manuiplator));
-    rightBumper.onTrue(new InstantCommand(()->SUB_Intake.intakeOut(),manuiplator));
-    //intake.setDefaultCommand(new RunCommand(()-> {Intake.intakeStop();},manuiplator));
+    leftBumper.onTrue(new RunCommand(()->SUB_Intake.intakeIn(),manuiplator));
+    rightBumper.onTrue(new RunCommand(()->SUB_Intake.intakeOut(),manuiplator));
+    //intake.setDefaultCommand(new RunCommand(()-> {intake.intakeStop();},intake));
 
     //manuiplator.setDefaultCommand(new RunCommand(()-> {manuiplator.armMoveVoltage(Constants.Manuiplator.kArmFeedforward);},manuiplator));
     manuiplator.setDefaultCommand(new RunCommand(()-> manuiplator.runAutomatic(), manuiplator));
@@ -89,20 +78,6 @@ public class RobotContainer {
     leftBumperC.whileTrue(new RunCommand(()->manuiplator.armMoveVoltage(-.6),manuiplator));
     RightBumperC.whileTrue(new RunCommand(()->manuiplator.armMoveVoltage(6),manuiplator));
     // new Trigger(()->(!leftBumper.getAsBoolean() && !rightBumper.getAsBoolean())).onFalse(new InstantCommand(()->manuiplator.armMoveVoltage(0)));
-
-    // test.setDefaultCommand(
-    //     new RunCommand(
-    //         () -> test.drive(
-    //             -MathUtil.applyDeadband(joystick.getRawAxis(1), OIConstants.kDriveDeadband),
-    //             -MathUtil.applyDeadband(joystick.getRawAxis(0), OIConstants.kDriveDeadband),
-    //             -MathUtil.applyDeadband(joystick.getRawAxis(2), OIConstants.kDriveDeadband),
-    //             true, true),
-    //             test));
-    
-    // leftBumper.whileTrue(new InstantCommand(()->manuiplator.rotateArm(.25)));
-    // rightBumper.whileTrue(new InstantCommand(()->manuiplator.rotateArm(-.25)));
-    // new Trigger(()->(!leftBumper.getAsBoolean() && !rightBumper.getAsBoolean())).onTrue(new InstantCommand(()->manuiplator.rotateArm(0)));
-
 
   }
 

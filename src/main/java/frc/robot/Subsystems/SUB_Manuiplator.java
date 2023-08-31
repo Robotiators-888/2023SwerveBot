@@ -68,7 +68,7 @@ public class SUB_Manuiplator extends SubsystemBase {
         rotateRelativeEncoder.setPosition(m_encoder.getPosition());
         m_controller = rotateMotor.getPIDController();
         PIDGains.setSparkMaxGains(m_controller, new PIDGains(0, 0, 0));
-        m_setpoint = Constants.Manuiplator.kGroundPosition;
+        m_setpoint = Constants.Manuiplator.kStow;
         
         m_timer = new Timer();
         m_timer.start();

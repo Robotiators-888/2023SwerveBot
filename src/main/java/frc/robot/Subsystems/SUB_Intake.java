@@ -12,10 +12,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SUB_Intake extends SubsystemBase {
   /** Creates a new Intake. */
-  private final static TalonSRX intakeMotor = new TalonSRX(Constants.Manuiplator.kMANUIP_INTAKE_MOTOR_CANID);    
+  private final static TalonSRX intakeMotor = new TalonSRX(Constants.Manuiplator.kMANUIP_INTAKE_MOTOR_CANID);
 
   public static void intakeIn(){
-    intakeMotor.set(TalonSRXControlMode.PercentOutput,-0.60);
+    intakeMotor.set(TalonSRXControlMode.PercentOutput, -0.60);
   }
   public static void intakeOut(){
     intakeMotor.set(TalonSRXControlMode.PercentOutput,0.60);
@@ -26,7 +26,7 @@ public class SUB_Intake extends SubsystemBase {
 
   public SUB_Intake() {
     intakeMotor.enableCurrentLimit(true);
-    intakeMotor.configPeakCurrentLimit(15);
+    intakeMotor.configPeakCurrentLimit(35);
   }
 
   @Override
