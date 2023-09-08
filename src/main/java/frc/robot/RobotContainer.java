@@ -68,16 +68,13 @@ public class RobotContainer {
     yButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kStow, manuiplator)));
     xButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kSingleFeeder, manuiplator)));
 
-    leftBumper.onTrue(new RunCommand(()->SUB_Intake.intakeIn(),manuiplator));
-    rightBumper.onTrue(new RunCommand(()->SUB_Intake.intakeOut(),manuiplator));
-    //intake.setDefaultCommand(new RunCommand(()-> {intake.intakeStop();},intake));
+    leftBumper.whileTrue(new RunCommand(()->SUB_Intake.intakeIn(),manuiplator)).onFalse(new InstantCommand(()->SUB_Intake.intakeStop()));
+    rightBumper.whileTrue(new RunCommand(()->SUB_Intake.intakeOut(),manuiplator)).onFalse(new InstantCommand(()->SUB_Intake.intakeStop()));
 
-    //manuiplator.setDefaultCommand(new RunCommand(()-> {manuiplator.armMoveVoltage(Constants.Manuiplator.kArmFeedforward);},manuiplator));
     manuiplator.setDefaultCommand(new RunCommand(()-> manuiplator.runAutomatic(), manuiplator));
 
     leftBumperC.whileTrue(new RunCommand(()->manuiplator.armMoveVoltage(-.6),manuiplator));
     RightBumperC.whileTrue(new RunCommand(()->manuiplator.armMoveVoltage(6),manuiplator));
-    // new Trigger(()->(!leftBumper.getAsBoolean() && !rightBumper.getAsBoolean())).onFalse(new InstantCommand(()->manuiplator.armMoveVoltage(0)));
 
   }
 

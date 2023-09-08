@@ -20,9 +20,13 @@ public class SUB_Intake extends SubsystemBase {
   public static void intakeOut(){
     intakeMotor.set(TalonSRXControlMode.PercentOutput,0.60);
   }
-  public void intakeStop(){
+  public static void intakeStop(){
     intakeMotor.set(TalonSRXControlMode.PercentOutput,0);
-  }  
+  }
+  
+  public void runIntake(double speed){
+    intakeMotor.set(TalonSRXControlMode.PercentOutput, speed);
+  }
 
   public SUB_Intake() {
     intakeMotor.enableCurrentLimit(true);
