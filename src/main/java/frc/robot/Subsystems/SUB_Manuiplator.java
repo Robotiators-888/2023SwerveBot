@@ -1,25 +1,15 @@
 package frc.robot.Subsystems;
 
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import java.util.function.Supplier;
-
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
-import com.revrobotics.SparkMaxAlternateEncoder;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 import com.revrobotics.SparkMaxPIDController.ArbFFUnits;
-import com.revrobotics.REVLibError;
-
 import frc.libs.PIDGains;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,17 +19,10 @@ import frc.robot.Constants;
 
 
 public class SUB_Manuiplator extends SubsystemBase {
-    //private final CANSparkMax Extend = new CANSparkMax(Constants.Manuiplator.kMANUIP_EXTEND_MOTOR_CANID, MotorType.kBrushless);
     private final CANSparkMax rotateMotor = new CANSparkMax(Constants.Manuiplator.kMANUIP_ROTATE_MOTOR_CANID, MotorType.kBrushless);
     public final SparkMaxAbsoluteEncoder rotateEncoder = rotateMotor.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
     private final RelativeEncoder rotateRelativeEncoder = rotateMotor.getEncoder();
     private Timer m_timer;
-
-    // public void rotateArm(double speed){
-
-    //     rotateMotor.set(speed);
-        
-    // }
 
     private TrapezoidProfile m_profile;
     
@@ -86,14 +69,6 @@ public class SUB_Manuiplator extends SubsystemBase {
       SmartDashboard.putNumber("RelativeEncoder", rotateRelativeEncoder.getPosition());
       SmartDashboard.putNumber("AbsEncoder", m_encoder.getPosition());
    }
-
-  //  public void driveMotor(int motor, double speed){
-  //       switch(motor){
-  //           case 1: rotateMotor.set(speed); break;
-  //           //case 2: Extend.set(speed); break;
-  //           case 3: intakeMotor.set(TalonSRXControlMode.PercentOutput, speed);
-  //       }
-  //  }
 
    public void setLimits(){
     //set soft limits and current limits for how far the manip can move

@@ -166,5 +166,11 @@ public final class Constants{
         
     }
 
+    public static class Extension{
+        public static final double kForwardSpeed = 0.5; 
+        public static final double kReverseSpeed = -0.5; 
+
+    }
+
     }
 
