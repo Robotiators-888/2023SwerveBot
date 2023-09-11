@@ -11,6 +11,9 @@ import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -43,5 +46,18 @@ public class SUB_Extension extends SubsystemBase {
 
   public static void extendStop() {
     extendMotor.set(0.0);
+  }
+
+  public Command driveUntil(double extend, boolean reversed) {
+    double speed;
+    if(reversed){
+      speed = -.6;
+      return new RunCommand(()->driveMotor(speed)).until(()->(extensionEncoder.getPosition() <= extend)).andThen(new InstantCommand(()->driveMotor(0)));
+
+    }else{
+      speed = .6;
+      return new RunCommand(()->driveMotor(speed)).until(()->(extensionEncoder.getPosition() >= extend)).andThen(new InstantCommand(()->driveMotor(0)));
+
+    }
   }
 }

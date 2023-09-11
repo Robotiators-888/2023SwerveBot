@@ -40,7 +40,7 @@ public class RobotContainer {
   JoystickButton xButton = logiUtils1.getXButtonPressed(); //Single Feed
   JoystickButton bButton = logiUtils1.getBButtonPressed(); //Scoring Height
 
-  private AutoBuilder autoBuilder = new AutoBuilder(drivetrain);
+  private AutoBuilder autoBuilder = new AutoBuilder(drivetrain, extension, intake, manuiplator);
 
   public RobotContainer() {
     configureBindings();
@@ -61,17 +61,6 @@ public class RobotContainer {
   public void periodic(){
     SmartDashboard.putNumber("Scoring height", manager.getScoringHeight());
   }
-
-    // Flight Controller
-    // drivetrain.setDefaultCommand(
-    //     new RunCommand(
-    //         () -> drivetrain.drive(
-    //             -MathUtil.applyDeadband(joystick.getRawAxis(1), OIConstants.kDriveDeadband),
-    //             -MathUtil.applyDeadband(joystick.getRawAxis(0), OIConstants.kDriveDeadband),
-    //             -MathUtil.applyDeadband(joystick.getRawAxis(2), OIConstants.kDriveDeadband),
-    //             true, true),
-    //             drivetrain));
-
 
   private void configureBindings() {
     aButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kGroundPosition, manuiplator)));
