@@ -1,10 +1,13 @@
 package frc.robot;
 
 import com.revrobotics.CANSparkMax.IdleMode;
+
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.libs.PIDGains;
 
 public final class Constants {
 
@@ -35,6 +38,8 @@ public final class Constants {
         ((kWheelDiameterMeters * Math.PI) / kDrivingMotorReduction) / 60.0; // meters per second
 
     public static final double kTurningEncoderPositionFactor = (2 * Math.PI); // radians
+
+    public static final double kTurningVelocityFactor = (2 * Math.PI) / 60.0; // radians per second
     public static final double kTurningEncoderVelocityFactor =
         (2 * Math.PI) / 60.0; // radians per second
 
@@ -126,5 +131,50 @@ public final class Constants {
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
     public static final boolean kGyroReversed = true;
-  }
-}
+    }
+ 
+    public static class Manuiplator{
+        public static final int kMANUIP_ROTATE_MOTOR_CANID = 31;
+        public static final int kMANUIP_INTAKE_MOTOR_CANID = 32;
+        public static final int kMANUIP_EXTEND_MOTOR_CANID = 33;
+
+        public static final double INTAKE_CONE_SPEED = 0.65;
+        public static final double INTAKE_CUBE_SPEED = 0.55;
+
+        public static final double PID_kP = 0.11425;
+        public static final int PID_kI = 0;
+        public static final double PID_kD = 0.021;
+        public static final double FF_kA = .1267;
+        public static final double FF_kG = .4847; //amount of volts to Overcome gravity on the arm, was 1
+        public static final double FF_kS = .11092;
+        public static final double FF_kV = 5.9339; 
+        public static final double FF_Velocity = 0.90511;
+        public static final double FF_Accel = 0.68018;
+        public static final TrapezoidProfile.Constraints kArmMotionConstraint = new TrapezoidProfile.Constraints(0.75, 1);
+        public static final ArmFeedforward kArmFeedforward = new ArmFeedforward(FF_kS, FF_kG, FF_kV, FF_kA);
+
+        public static final PIDGains kArmPositionGains = new PIDGains(0.6, 0.0, 0.0);
+
+        //public static final double kGroundPosition = 0.1;
+        public static final double kGroundPosition = .07;
+        public static final double kScoreHigh = .375;
+        public static final double kScoreMid = .335;
+        public static final double kScoreLow = 0.1;
+        public static final double kStow = .7;
+        public static final double kSingleFeeder = 0.38;
+        
+
+        public static final double kmaxVelocity = 6.47*Math.PI;
+        public static final double kmaxAcceleration = 4.27;
+        
+    }
+
+    public static class Extension{
+        public static final double kForwardSpeed = 0.5; 
+        public static final double kReverseSpeed = -0.5; 
+
+    }
+
+    }
+
+

@@ -24,29 +24,23 @@ import org.littletonrobotics.junction.Logger;
 public class SUB_Drivetrain extends SubsystemBase {
   public final Field2d m_field = new Field2d();
   /** Creates a new Drivetrain. */
-  private final MAXSwerveModule frontLeft =
-      new MAXSwerveModule(
-          Constants.Drivetrain.kFRONT_LEFT_DRIVE_MOTOR_CANID,
-          Constants.Drivetrain.kFRONT_LEFT_STEER_MOTOR_CANID,
-          Constants.Drivetrain.kFrontLeftChassisAngularOffset);
+  
+  private final MAXSwerveModule frontLeft 
+    = new MAXSwerveModule(Constants.Drivetrain.kFRONT_LEFT_DRIVE_MOTOR_CANID, 
+    Constants.Drivetrain.kFRONT_LEFT_STEER_MOTOR_CANID, Constants.Drivetrain.kFrontLeftChassisAngularOffset);
 
-  private final MAXSwerveModule frontRight =
-      new MAXSwerveModule(
-          Constants.Drivetrain.kFRONT_RIGHT_DRIVE_MOTOR_CANID,
-          Constants.Drivetrain.kFRONT_RIGHT_STEER_MOTOR_CANID,
-          Constants.Drivetrain.kFrontRightChassisAngularOffset);
+  private final MAXSwerveModule frontRight 
+    = new MAXSwerveModule(Constants.Drivetrain.kFRONT_RIGHT_DRIVE_MOTOR_CANID, 
+    Constants.Drivetrain.kFRONT_RIGHT_STEER_MOTOR_CANID, Constants.Drivetrain.kFrontRightChassisAngularOffset);
 
-  private final MAXSwerveModule backLeft =
-      new MAXSwerveModule(
-          Constants.Drivetrain.kBACK_LEFT_DRIVE_MOTOR_CANID,
-          Constants.Drivetrain.kBACK_LEFT_STEER_MOTOR_CANID,
-          Constants.Drivetrain.kBackLeftChassisAngularOffset);
+  private final MAXSwerveModule backLeft 
+    = new MAXSwerveModule(Constants.Drivetrain.kBACK_LEFT_DRIVE_MOTOR_CANID, 
+    Constants.Drivetrain.kBACK_LEFT_STEER_MOTOR_CANID, Constants.Drivetrain.kBackLeftChassisAngularOffset);
 
-  private final MAXSwerveModule backRight =
-      new MAXSwerveModule(
-          Constants.Drivetrain.kBACK_RIGHT_DRIVE_MOTOR_CANID,
-          Constants.Drivetrain.kBACK_RIGHT_STEER_MOTOR_CANID,
-          Constants.Drivetrain.kBackRightChassisAngularOffset);
+  private final MAXSwerveModule backRight 
+    = new MAXSwerveModule(Constants.Drivetrain.kBACK_RIGHT_DRIVE_MOTOR_CANID, 
+    Constants.Drivetrain.kBACK_RIGHT_STEER_MOTOR_CANID, Constants.Drivetrain.kBackRightChassisAngularOffset);    
+
 
   AHRS navx = new AHRS();
 
