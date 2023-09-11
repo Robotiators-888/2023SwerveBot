@@ -72,17 +72,6 @@ public class RobotContainer {
     //             true, true),
     //             drivetrain));
 
-    // Logi Controller
-    drivetrain.setDefaultCommand(
-        new RunCommand(
-            () ->
-                drivetrain.drive(
-                    -MathUtil.applyDeadband(joystick.getRawAxis(1), OIConstants.kDriveDeadband),
-                    -MathUtil.applyDeadband(joystick.getRawAxis(0), OIConstants.kDriveDeadband),
-                    -MathUtil.applyDeadband(joystick.getRawAxis(4), OIConstants.kDriveDeadband),
-                    true,
-                    true),
-            drivetrain));
 
   private void configureBindings() {
     aButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kGroundPosition, manuiplator)));
