@@ -4,13 +4,7 @@
 
 package frc.robot.Subsystems;
 
-import frc.robot.Constants;
-import frc.robot.utils.SwerveUtils;
-
-import org.littletonrobotics.junction.Logger;
-
 import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -21,17 +15,20 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.utils.SwerveUtils;
+import org.littletonrobotics.junction.Logger;
 
 public class SUB_SwerveModuleTest extends SubsystemBase {
 
-
-  private final MAXSwerveModule frontLeft 
-  = new MAXSwerveModule(Constants.Drivetrain.kFRONT_LEFT_DRIVE_MOTOR_CANID, 
-  Constants.Drivetrain.kFRONT_LEFT_STEER_MOTOR_CANID, Constants.Drivetrain.kFrontLeftChassisAngularOffset);
+  private final MAXSwerveModule frontLeft =
+      new MAXSwerveModule(
+          Constants.Drivetrain.kFRONT_LEFT_DRIVE_MOTOR_CANID,
+          Constants.Drivetrain.kFRONT_LEFT_STEER_MOTOR_CANID,
+          Constants.Drivetrain.kFrontLeftChassisAngularOffset);
 
   /** Creates a new SUB_SwerveModuleTest. */
   public SUB_SwerveModuleTest() {}
-
 
   AHRS navx = new AHRS();
 
@@ -40,19 +37,21 @@ public class SUB_SwerveModuleTest extends SubsystemBase {
   private double m_currentTranslationDir = 0.0;
   private double m_currentTranslationMag = 0.0;
 
-  private SlewRateLimiter m_magLimiter = new SlewRateLimiter(Constants.Drivetrain.kMagnitudeSlewRate);
-  private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(Constants.Drivetrain.kRotationalSlewRate);
+  private SlewRateLimiter m_magLimiter =
+      new SlewRateLimiter(Constants.Drivetrain.kMagnitudeSlewRate);
+  private SlewRateLimiter m_rotLimiter =
+      new SlewRateLimiter(Constants.Drivetrain.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
- // Odometry class for tracking robot pose
- SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
-  Constants.Drivetrain.kDriveKinematics,
-  Rotation2d.fromDegrees(navx.getAngle()),
-  new SwerveModulePosition[] {
-      frontLeft.getPosition(),
-  });
+  // Odometry class for tracking robot pose
+  SwerveDriveOdometry m_odometry =
+      new SwerveDriveOdometry(
+          Constants.Drivetrain.kDriveKinematics,
+          Rotation2d.fromDegrees(navx.getAngle()),
+          new SwerveModulePosition[] {
+            frontLeft.getPosition(),
+          });
 
-  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -62,7 +61,6 @@ public class SUB_SwerveModuleTest extends SubsystemBase {
     Logger.getInstance().recordOutput("Driving Velocity", frontLeft.getVelocityDrive());
     Logger.getInstance().recordOutput("Steering Velocity", frontLeft.getVelocitySteer());
 
-
     // m_odometry.update(
     //   Rotation2d.fromDegrees(navx.getAngle()),
     //   new SwerveModulePosition[] {
@@ -70,7 +68,7 @@ public class SUB_SwerveModuleTest extends SubsystemBase {
     //   });
   }
 
- /**
+  /**
    * Returns the currently-estimated pose of the robot.
    *
    * @return The pose.
@@ -79,8 +77,7 @@ public class SUB_SwerveModuleTest extends SubsystemBase {
     return m_odometry.getPoseMeters();
   }
 
-
-/**
+  /**
    * Resets the odometry to the specified pose.
    *
    * @param pose The pose to which to set the odometry.
@@ -88,23 +85,21 @@ public class SUB_SwerveModuleTest extends SubsystemBase {
   public void resetOdometry(Pose2d pose) {
     m_odometry.resetPosition(
         Rotation2d.fromDegrees(navx.getAngle()),
-        new SwerveModulePosition[] {
-            frontLeft.getPosition()
-        },
+        new SwerveModulePosition[] {frontLeft.getPosition()},
         pose);
   }
 
- /**
+  /**
    * Method to drive the robot using joystick info.
    *
-   * @param xSpeed        Speed of the robot in the x direction (forward).
-   * @param ySpeed        Speed of the robot in the y direction (sideways).
-   * @param rot           Angular rate of the robot.
-   * @param fieldRelative Whether the provided x and y speeds are relative to the
-   *                      field.
-   * @param rateLimit     Whether to enable rate limiting for smoother control.
+   * @param xSpeed Speed of the robot in the x direction (forward).
+   * @param ySpeed Speed of the robot in the y direction (sideways).
+   * @param rot Angular rate of the robot.
+   * @param fieldRelative Whether the provided x and y speeds are relative to the field.
+   * @param rateLimit Whether to enable rate limiting for smoother control.
    */
-  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
+  public void drive(
+      double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
 
     double xSpeedCommanded;
     double ySpeedCommanded;
@@ -118,20 +113,24 @@ public class SUB_SwerveModuleTest extends SubsystemBase {
       // acceleration
       double directionSlewRate;
       if (m_currentTranslationMag != 0.0) {
-        directionSlewRate = Math.abs(Constants.Drivetrain.kDirectionSlewRate / m_currentTranslationMag);
+        directionSlewRate =
+            Math.abs(Constants.Drivetrain.kDirectionSlewRate / m_currentTranslationMag);
       } else {
-        directionSlewRate = 500.0; // some high number that means the slew rate is effectively instantaneous
+        directionSlewRate =
+            500.0; // some high number that means the slew rate is effectively instantaneous
       }
 
       double currentTime = WPIUtilJNI.now() * 1e-6;
       double elapsedTime = currentTime - m_prevTime;
       double angleDif = SwerveUtils.AngleDifference(inputTranslationDir, m_currentTranslationDir);
       if (angleDif < 0.45 * Math.PI) {
-        m_currentTranslationDir = SwerveUtils.StepTowardsCircular(m_currentTranslationDir, inputTranslationDir,
-            directionSlewRate * elapsedTime);
+        m_currentTranslationDir =
+            SwerveUtils.StepTowardsCircular(
+                m_currentTranslationDir, inputTranslationDir, directionSlewRate * elapsedTime);
         m_currentTranslationMag = m_magLimiter.calculate(inputTranslationMag);
       } else if (angleDif > 0.85 * Math.PI) {
-        if (m_currentTranslationMag > 1e-4) { // some small number to avoid floating-point errors with equality checking
+        if (m_currentTranslationMag
+            > 1e-4) { // some small number to avoid floating-point errors with equality checking
           // keep currentTranslationDir unchanged
           m_currentTranslationMag = m_magLimiter.calculate(0.0);
         } else {
@@ -139,8 +138,9 @@ public class SUB_SwerveModuleTest extends SubsystemBase {
           m_currentTranslationMag = m_magLimiter.calculate(inputTranslationMag);
         }
       } else {
-        m_currentTranslationDir = SwerveUtils.StepTowardsCircular(m_currentTranslationDir, inputTranslationDir,
-            directionSlewRate * elapsedTime);
+        m_currentTranslationDir =
+            SwerveUtils.StepTowardsCircular(
+                m_currentTranslationDir, inputTranslationDir, directionSlewRate * elapsedTime);
         m_currentTranslationMag = m_magLimiter.calculate(0.0);
       }
       m_prevTime = currentTime;
@@ -160,21 +160,23 @@ public class SUB_SwerveModuleTest extends SubsystemBase {
     double ySpeedDelivered = ySpeedCommanded * Constants.Drivetrain.kMaxSpeedMetersPerSecond;
     double rotDelivered = m_currentRotation * Constants.Drivetrain.kMaxAngularSpeed;
 
-    var swerveModuleStates = Constants.Drivetrain.kDriveKinematics.toSwerveModuleStates(
-      fieldRelative
-          ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(navx.getAngle()))
-          : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
-  SwerveDriveKinematics.desaturateWheelSpeeds(
-      swerveModuleStates, Constants.Drivetrain.kMaxSpeedMetersPerSecond);
+    var swerveModuleStates =
+        Constants.Drivetrain.kDriveKinematics.toSwerveModuleStates(
+            fieldRelative
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(
+                    xSpeedDelivered,
+                    ySpeedDelivered,
+                    rotDelivered,
+                    Rotation2d.fromDegrees(navx.getAngle()))
+                : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+        swerveModuleStates, Constants.Drivetrain.kMaxSpeedMetersPerSecond);
     frontLeft.setDesiredState(swerveModuleStates[0]);
   }
 
-/**
-   * Sets the wheels into an X formation to prevent movement.
-   */
+  /** Sets the wheels into an X formation to prevent movement. */
   public void setX() {
     frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
-   
   }
 
   /**
@@ -186,13 +188,11 @@ public class SUB_SwerveModuleTest extends SubsystemBase {
     SwerveDriveKinematics.desaturateWheelSpeeds(
         desiredStates, Constants.Drivetrain.kMaxSpeedMetersPerSecond);
     frontLeft.setDesiredState(desiredStates[0]);
-    
   }
 
   /** Resets the drive encoders to currently read a position of 0. */
   public void resetEncoders() {
     frontLeft.resetEncoders();
-    
   }
 
   /** Zeroes the heading of the robot. */

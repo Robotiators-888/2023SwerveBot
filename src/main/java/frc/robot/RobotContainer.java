@@ -22,8 +22,6 @@ import frc.robot.utils.AutoBuilder;
 import frc.robot.utils.LogiUtils;
 
 public class RobotContainer {
-  
-
   public static SUB_Drivetrain drivetrain = new SUB_Drivetrain();
   public static SUB_Manuiplator manuiplator = new SUB_Manuiplator();
   public static SUB_Intake intake = new SUB_Intake();
@@ -64,6 +62,28 @@ public class RobotContainer {
     SmartDashboard.putNumber("Scoring height", manager.getScoringHeight());
   }
 
+    // Flight Controller
+    // drivetrain.setDefaultCommand(
+    //     new RunCommand(
+    //         () -> drivetrain.drive(
+    //             -MathUtil.applyDeadband(joystick.getRawAxis(1), OIConstants.kDriveDeadband),
+    //             -MathUtil.applyDeadband(joystick.getRawAxis(0), OIConstants.kDriveDeadband),
+    //             -MathUtil.applyDeadband(joystick.getRawAxis(2), OIConstants.kDriveDeadband),
+    //             true, true),
+    //             drivetrain));
+
+    // Logi Controller
+    drivetrain.setDefaultCommand(
+        new RunCommand(
+            () ->
+                drivetrain.drive(
+                    -MathUtil.applyDeadband(joystick.getRawAxis(1), OIConstants.kDriveDeadband),
+                    -MathUtil.applyDeadband(joystick.getRawAxis(0), OIConstants.kDriveDeadband),
+                    -MathUtil.applyDeadband(joystick.getRawAxis(4), OIConstants.kDriveDeadband),
+                    true,
+                    true),
+            drivetrain));
+
   private void configureBindings() {
     aButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kGroundPosition, manuiplator)));
     bButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(manager.getScoringHeight(), manuiplator)));
@@ -77,6 +97,7 @@ public class RobotContainer {
 
     leftBumper.whileTrue(new RunCommand(()->SUB_Extension.driveMotor(Constants.Extension.kReverseSpeed), extension)).onFalse(new InstantCommand(()->SUB_Extension.extendStop()));
     rightBumper.whileTrue(new RunCommand(()->SUB_Extension.driveMotor(Constants.Extension.kForwardSpeed), extension)).onFalse(new InstantCommand(()->SUB_Extension.extendStop()));
+
 
   }
 
