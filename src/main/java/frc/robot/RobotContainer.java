@@ -35,6 +35,7 @@ public class RobotContainer {
   JoystickButton RightBumperC = DriverC.getRightBumperButtonPressed();
   JoystickButton leftBumper = logiUtils1.getLeftBumperButtonPressed();
   JoystickButton rightBumper = logiUtils1.getRightBumperButtonPressed();
+  
   JoystickButton aButton = logiUtils1.getAButtonPressed(); //Ground
   JoystickButton yButton = logiUtils1.getYButtonPressed(); //Stow/up
   JoystickButton xButton = logiUtils1.getXButtonPressed(); //Single Feed
@@ -90,13 +91,15 @@ public class RobotContainer {
     yButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kStow, manuiplator)));
     xButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kSingleFeeder, manuiplator)));
 
-    leftBumperC.whileTrue(new RunCommand(()->SUB_Intake.intakeIn(),manuiplator)).onFalse(new InstantCommand(()->SUB_Intake.intakeStop()));
-    RightBumperC.whileTrue(new RunCommand(()->SUB_Intake.intakeOut(),manuiplator)).onFalse(new InstantCommand(()->SUB_Intake.intakeStop()));
+    leftBumperC.whileTrue(new RunCommand(()->SUB_Intake.intakeIn(),intake)).onFalse(new InstantCommand(()->SUB_Intake.intakeStop()));
+    RightBumperC.whileTrue(new RunCommand(()->SUB_Intake.intakeOut(),intake)).onFalse(new InstantCommand(()->SUB_Intake.intakeStop()));
 
     manuiplator.setDefaultCommand(new RunCommand(()-> manuiplator.runAutomatic(), manuiplator));
 
     leftBumper.whileTrue(new RunCommand(()->SUB_Extension.driveMotor(Constants.Extension.kReverseSpeed), extension)).onFalse(new InstantCommand(()->SUB_Extension.extendStop()));
     rightBumper.whileTrue(new RunCommand(()->SUB_Extension.driveMotor(Constants.Extension.kForwardSpeed), extension)).onFalse(new InstantCommand(()->SUB_Extension.extendStop()));
+    left.whileTrue(new RunCommand(()->SUB_Extension.driveMotor(Constants.Extension.kReverseSpeed), extension)).onFalse(new InstantCommand(()->SUB_Extension.extendStop()));
+    right.whileTrue(new RunCommand(()->SUB_Extension.driveMotor(Constants.Extension.kReverseSpeed), extension)).onFalse(new InstantCommand(()->SUB_Extension.extendStop()));
 
 
   }
