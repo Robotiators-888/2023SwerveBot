@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Subsystems.SUB_Drivetrain;
 import frc.robot.Subsystems.SUB_Extension;
@@ -28,6 +29,7 @@ public class RobotContainer {
   public static SUB_Extension extension = new SUB_Extension();
   public static RobotManager manager = RobotManager.getInstance();
 
+
   Joystick joystick = new Joystick(0);
   LogiUtils DriverC = new LogiUtils(0);
   LogiUtils logiUtils1 = new LogiUtils(1);
@@ -39,7 +41,7 @@ public class RobotContainer {
   JoystickButton yButton = logiUtils1.getYButtonPressed(); //Stow/up
   JoystickButton xButton = logiUtils1.getXButtonPressed(); //Single Feed
   JoystickButton bButton = logiUtils1.getBButtonPressed(); //Scoring Height
-
+ 
   private AutoBuilder autoBuilder = new AutoBuilder(drivetrain, extension, intake, manuiplator);
 
   public RobotContainer() {
@@ -60,6 +62,7 @@ public class RobotContainer {
 
   public void periodic(){
     SmartDashboard.putNumber("Scoring height", manager.getScoringHeight());
+
   }
 
   private void configureBindings() {
@@ -72,11 +75,17 @@ public class RobotContainer {
     RightBumperC.whileTrue(new RunCommand(()->SUB_Intake.intakeOut(),manuiplator)).onFalse(new InstantCommand(()->SUB_Intake.intakeStop()));
 
     manuiplator.setDefaultCommand(new RunCommand(()-> manuiplator.runAutomatic(), manuiplator));
-
+    
+   
     leftBumper.whileTrue(new RunCommand(()->SUB_Extension.driveMotor(Constants.Extension.kReverseSpeed), extension)).onFalse(new InstantCommand(()->SUB_Extension.extendStop()));
     rightBumper.whileTrue(new RunCommand(()->SUB_Extension.driveMotor(Constants.Extension.kForwardSpeed), extension)).onFalse(new InstantCommand(()->SUB_Extension.extendStop()));
 
-
+    new Trigger(() -> 
+    (Math.abs(Math.pow(logiUtils1.getLeftTriggerAxis(), 2) - Math.pow(logiUtils1.getRightTriggerAxis(), 2)) > .5
+    )).whileTrue(new RunCommand(
+      () ->
+      manuiplator.runManual((Math.pow(logiUtils1.getLeftTriggerAxis(), 2) - Math.pow(logiUtils1.getRightTriggerAxis(),2)) * .5)
+      , manuiplator));
   }
 
   public Command getAutonmousCommand(){
