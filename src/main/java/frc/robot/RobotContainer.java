@@ -81,13 +81,13 @@ public class RobotContainer {
     rightBumper.whileTrue(new RunCommand(()->SUB_Extension.driveMotor(Constants.Extension.kForwardSpeed), extension)).onFalse(new InstantCommand(()->SUB_Extension.extendStop()));
 
     new Trigger(() -> 
-    (Math.abs(Math.pow(logiUtils1.getLeftTriggerAxis(), 2) - Math.pow(logiUtils1.getRightTriggerAxis(), 2)) > .5
+    (Math.abs(Math.pow(logiUtils1.getLeftTriggerAxis(), 2) - Math.pow(logiUtils1.getRightTriggerAxis(), 2)) > .05
     )).whileTrue(new RunCommand(
       () ->
-      manuiplator.runManual((Math.pow(logiUtils1.getLeftTriggerAxis(), 2) - Math.pow(logiUtils1.getRightTriggerAxis(),2)) * .5)
-      , manuiplator));
+      manuiplator.runManual((Math.pow(logiUtils1.getLeftTriggerAxis(), 3) - Math.pow(logiUtils1.getRightTriggerAxis(),3)) * .5)
+, manuiplator));
   }
-
+  
   public Command getAutonmousCommand(){
     return autoBuilder.getSelectedAuto();
   }
