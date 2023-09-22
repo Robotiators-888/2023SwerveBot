@@ -21,6 +21,7 @@ public class SUB_Extension extends SubsystemBase {
     private final static CANSparkMax extendMotor = new CANSparkMax(Constants.Manuiplator.kMANUIP_EXTEND_MOTOR_CANID, MotorType.kBrushless);
     private RelativeEncoder extensionEncoder;
 
+
   /** Creates a new SUB_Extension. */
   public SUB_Extension() {
     extendMotor.restoreFactoryDefaults();
@@ -31,6 +32,8 @@ public class SUB_Extension extends SubsystemBase {
     extendMotor.setSoftLimit(SoftLimitDirection.kReverse, (float) 0.1);
     extendMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
     extendMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    extendMotor.setOpenLoopRampRate(.75);
+    extendMotor.setClosedLoopRampRate(1.5);
     extendMotor.burnFlash();
   }
 
