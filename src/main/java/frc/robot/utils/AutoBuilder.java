@@ -42,17 +42,17 @@ public class AutoBuilder {
   //                          Routines
   // ====================================================================
 
-  private Command dummyPathOne() {
+ /* private Command dummyPathOne() {
     return PathPlannerBase.followTrajectoryCommand(dummyPath, true);
-  }
+  } */
 
-  private Command dummyPathDonut() {
+ /*  private Command dummyPathDonut() {
     return PathPlannerBase.followTrajectoryCommand(dummyDonut, true);
-  }
+  } */
 
-  private Command figureEight() {
+ /*  private Command figureEight() {
     return PathPlannerBase.followTrajectoryCommand(figure8, true);
-  }
+  } */
 
   private Command score1BackNoCable(){
     return new SequentialCommandGroup(
@@ -70,7 +70,7 @@ public class AutoBuilder {
     );
   }
 
-  private Command ScoreOne(){
+  public Command ScoreOne(){
     return new SequentialCommandGroup(
         new InstantCommand(()->manuiplator.setTargetPosition(manager.getScoringHeight(), manuiplator)),
         new WaitCommand(.5),
@@ -99,9 +99,10 @@ public class AutoBuilder {
     this.intake = intake;
     this.manuiplator = manuiplator;
 
-    chooser.addOption("Dummy 1", dummyPathOne());
+    /* chooser.addOption("Dummy 1", dummyPathOne());
     chooser.addOption("Dummy Donut", dummyPathDonut());
     chooser.addOption("8's HEHEHEHE", figureEight());
+    */
     chooser.addOption("Score Two NonCable", nonCableSide2Pc());
     chooser.addOption("Score One NonCable", score1BackNoCable());
     chooser.addOption("Score One Cable", score1BackCable());

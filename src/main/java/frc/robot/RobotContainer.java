@@ -4,14 +4,13 @@
 
 package frc.robot;
 
-
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OIConstants;
@@ -37,11 +36,12 @@ public class RobotContainer {
   JoystickButton RightBumperC = DriverC.getRightBumperButtonPressed();
   JoystickButton leftBumper = logiUtils1.getLeftBumperButtonPressed();
   JoystickButton rightBumper = logiUtils1.getRightBumperButtonPressed();
-  JoystickButton aButton = logiUtils1.getAButtonPressed(); //Ground
-  JoystickButton yButton = logiUtils1.getYButtonPressed(); //Stow/up
-  JoystickButton xButton = logiUtils1.getXButtonPressed(); //Single Feed
-  JoystickButton bButton = logiUtils1.getBButtonPressed(); //Scoring Height
- 
+  JoystickButton aButton = logiUtils1.getAButtonPressed(); // Ground
+  JoystickButton yButton = logiUtils1.getYButtonPressed(); // Stow/up
+  JoystickButton xButton = logiUtils1.getXButtonPressed(); // Single Feed
+  JoystickButton bButton = logiUtils1.getBButtonPressed(); // Scoring Height
+  JoystickButton startButton = logiUtils1.getStartButtonPressed();
+
   private AutoBuilder autoBuilder = new AutoBuilder(drivetrain, extension, intake, manuiplator);
 
   public RobotContainer() {
@@ -49,7 +49,6 @@ public class RobotContainer {
 
     // Configure default commands
 
-    
     drivetrain.setDefaultCommand(
         new RunCommand(
             () -> drivetrain.drive(
@@ -57,41 +56,45 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(DriverC.getRawAxis(0), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(DriverC.getRawAxis(4), OIConstants.kDriveDeadband),
                 true, true),
-                drivetrain));
+            drivetrain));
   }
 
-  public void periodic(){
+  public void periodic() {
     SmartDashboard.putNumber("Scoring height", manager.getScoringHeight());
 
   }
 
   private void configureBindings() {
-    aButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kGroundPosition, manuiplator)));
-    bButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(manager.getScoringHeight(), manuiplator)));
-    yButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kStow, manuiplator)));
-    xButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kSingleFeeder, manuiplator)));
+    aButton.onTrue(new InstantCommand(() -> manuiplator.setTargetPosition(Constants.Manuiplator.kGroundPosition, manuiplator)));
+    bButton.onTrue(new InstantCommand(() -> manuiplator.setTargetPosition(manager.getScoringHeight(), manuiplator)));
+    yButton.onTrue(new InstantCommand(() -> manuiplator.setTargetPosition(Constants.Manuiplator.kStow, manuiplator)));
+    xButton.onTrue(new InstantCommand(() -> manuiplator.setTargetPosition(Constants.Manuiplator.kSingleFeeder, manuiplator)));
 
-    leftBumperC.whileTrue(new RunCommand(()->SUB_Intake.intakeIn(),manuiplator)).onFalse(new InstantCommand(()->SUB_Intake.intakeStop()));
-    RightBumperC.whileTrue(new RunCommand(()->SUB_Intake.intakeOut(),manuiplator)).onFalse(new InstantCommand(()->SUB_Intake.intakeStop()));
-
-    manuiplator.setDefaultCommand(new RunCommand(()-> manuiplator.runAutomatic(), manuiplator));
-    
    
-    leftBumper.whileTrue(new RunCommand(()->SUB_Extension.driveMotor(Constants.Extension.kReverseSpeed), extension)).onFalse(new InstantCommand(()->SUB_Extension.extendStop()));
-    rightBumper.whileTrue(new RunCommand(()->SUB_Extension.driveMotor(Constants.Extension.kForwardSpeed), extension)).onFalse(new InstantCommand(()->SUB_Extension.extendStop()));
+    leftBumperC.whileTrue(new RunCommand(() -> SUB_Intake.intakeIn(), manuiplator))
+        .onFalse(new InstantCommand(() -> SUB_Intake.intakeStop()));
+    RightBumperC.whileTrue(new RunCommand(() -> SUB_Intake.intakeOut(), manuiplator))
+        .onFalse(new InstantCommand(() -> SUB_Intake.intakeStop()));
+    startButton.onTrue(autoBuilder.ScoreOne());
+        
+          
+    manuiplator.setDefaultCommand(new RunCommand(() -> manuiplator.runAutomatic(), manuiplator));
 
-    new Trigger(() -> 
-    (Math.abs(Math.pow(logiUtils1.getLeftTriggerAxis(), 2) - Math.pow(logiUtils1.getRightTriggerAxis(), 2)) > .05
-    )).whileTrue(new RunCommand(
-      () ->
-      manuiplator.runManual((Math.pow(logiUtils1.getLeftTriggerAxis(), 3) - Math.pow(logiUtils1.getRightTriggerAxis(),3)) * .5)
-, manuiplator));
+    leftBumper.whileTrue(new RunCommand(() -> SUB_Extension.driveMotor(Constants.Extension.kReverseSpeed), extension))
+        .onFalse(new InstantCommand(() -> SUB_Extension.extendStop()));
+    rightBumper.whileTrue(new RunCommand(() -> SUB_Extension.driveMotor(Constants.Extension.kForwardSpeed), extension))
+        .onFalse(new InstantCommand(() -> SUB_Extension.extendStop()));
+
+    new Trigger(() -> (Math
+        .abs(Math.pow(logiUtils1.getLeftTriggerAxis(), 2) - Math.pow(logiUtils1.getRightTriggerAxis(), 2)) > .05))
+        .whileTrue(new RunCommand(
+            () -> manuiplator.runManual(
+                (Math.pow(logiUtils1.getLeftTriggerAxis(), 3) - Math.pow(logiUtils1.getRightTriggerAxis(), 3)) * .5),
+            manuiplator));
   }
-  
-  public Command getAutonmousCommand(){
+
+  public Command getAutonmousCommand() {
     return autoBuilder.getSelectedAuto();
   }
 
-  
-  
 }
