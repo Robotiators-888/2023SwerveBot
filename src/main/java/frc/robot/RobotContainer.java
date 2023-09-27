@@ -41,6 +41,7 @@ public class RobotContainer {
   JoystickButton xButton = logiUtils1.getXButtonPressed(); // Single Feed
   JoystickButton bButton = logiUtils1.getBButtonPressed(); // Scoring Height
   JoystickButton startButton = logiUtils1.getStartButtonPressed();
+  JoystickButton backButton = logiUtils1.getBackButtonPressed();
 
   private AutoBuilder autoBuilder = new AutoBuilder(drivetrain, extension, intake, manuiplator);
 
@@ -52,8 +53,8 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(
         new RunCommand(
             () -> drivetrain.drive(
-                -MathUtil.applyDeadband(DriverC.getRawAxis(1), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(DriverC.getRawAxis(0), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(Math.pow(DriverC.getRawAxis(1), 2), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(Math.pow(DriverC.getRawAxis(0), 2), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(DriverC.getRawAxis(4), OIConstants.kDriveDeadband),
                 true, true),
             drivetrain));
@@ -75,7 +76,9 @@ public class RobotContainer {
         .onFalse(new InstantCommand(() -> SUB_Intake.intakeStop()));
     RightBumperC.whileTrue(new RunCommand(() -> SUB_Intake.intakeOut(), manuiplator))
         .onFalse(new InstantCommand(() -> SUB_Intake.intakeStop()));
+        
     startButton.onTrue(autoBuilder.ScoreOne());
+    backButton.onTrue(autoBuilder.ScoreOneMid());
         
           
     manuiplator.setDefaultCommand(new RunCommand(() -> manuiplator.runAutomatic(), manuiplator));

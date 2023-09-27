@@ -71,11 +71,23 @@ public class AutoBuilder {
   }
 
   public Command ScoreOne(){
+    new InstantCommand(()->manager.setScoringHeightHigh());
     return new SequentialCommandGroup(
         new InstantCommand(()->manuiplator.setTargetPosition(manager.getScoringHeight(), manuiplator)),
-        new WaitCommand(.5),
+        new WaitCommand(.75),
         extension.driveUntil(60, false),
-        new RunCommand(()-> intake.runIntake(.6), intake).withTimeout(0.5),
+        new RunCommand(()-> intake.runIntake(-.6), intake).withTimeout(0.5),
+        new InstantCommand(()->intake.runIntake(0)),
+        returnManipulator()
+    );
+  }
+  public Command ScoreOneMid(){
+    new InstantCommand(()->manager.setScoringHeightMid());
+    return new SequentialCommandGroup(
+        new InstantCommand(()->manuiplator.setTargetPosition(manager.getScoringHeight(), manuiplator)),
+        new WaitCommand(.75),
+        extension.driveUntil(60, false),
+        new RunCommand(()-> intake.runIntake(-.6), intake).withTimeout(0.5),
         new InstantCommand(()->intake.runIntake(0)),
         returnManipulator()
     );
@@ -124,9 +136,11 @@ public class AutoBuilder {
   // ====================================================================
 
   private Command returnManipulator(){
-    return new SequentialCommandGroup(
-        new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kGroundPosition, manuiplator)),
-        extension.driveUntil(1, true)
+    return new SequentialCommandGroup( 
+        extension.driveUntil(1, true),
+        new WaitCommand(.1),
+        new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kGroundPosition, manuiplator))
+       
 
     );
   }

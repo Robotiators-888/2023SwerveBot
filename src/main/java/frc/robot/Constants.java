@@ -157,10 +157,10 @@ public final class Constants {
 
         //public static final double kGroundPosition = 0.1;
         public static final double kGroundPosition = .07;
-        public static final double kScoreHigh = .375;
+        public static final double kScoreHigh = .6;
         public static final double kScoreMid = .335;
         public static final double kScoreLow = 0.1;
-        public static final double kStow = .8;
+        public static final double kStow = .99;
         public static final double kSingleFeeder = 0.38;
         
 
