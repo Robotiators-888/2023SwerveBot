@@ -39,4 +39,56 @@ public class SUB_Limelight extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
   }
+
+  public boolean getTv() {
+    if (table.getEntry("tv").getDouble(0) == 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Crosshair offset to target x-value
+   * 
+   * @return double of offset of target x-value
+   */
+  public double getTx() {
+    return table.getEntry("tx").getDouble(0);
+  }
+
+  /**
+   * Crosshair offset to target y-value
+   * 
+   * @return double of offset of target y-value
+   */
+  public double getTy() {
+    return table.getEntry("ty").getDouble(0);
+  }
+
+  // find h1, h2, a1 of current limelight position
+  
+  // public double getDistance() {
+  //   double h1 = 35.125;
+  //   double h2 = 111;
+  //   double a1 = 0.4625123;
+  //   double a2 = Math.toRadians(this.getTy());
+
+  //   return (double) ((h2 - h1) / (Math.tan(a1 + a2)));
+  // }
+  /**
+   * Sets LED Mode
+   */
+  public void setLed(int value) {
+    table.getEntry("ledMode").setNumber(value);
+
+  }
+
+  /**
+   * Sets pipeline
+   */
+  public void setPipline(int value) {
+    table.getEntry("pipeline").setNumber(value);
+
+  }
 }
