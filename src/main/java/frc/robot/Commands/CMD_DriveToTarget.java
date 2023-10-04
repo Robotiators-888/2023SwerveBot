@@ -9,7 +9,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class CMD_LimeAlign extends CommandBase {
+public class CMD_DriveToTarget extends CommandBase {
   SUB_Limelight limelight;
   SUB_Drivetrain drivetrain;
 
@@ -26,7 +26,7 @@ public class CMD_LimeAlign extends CommandBase {
    * @param limeIn
    * @param driveIn
    */
-  public CMD_LimeAlign(SUB_Limelight limeIn, SUB_Drivetrain driveIn) {
+  public CMD_DriveToTarget(SUB_Limelight limeIn, SUB_Drivetrain driveIn) {
     this.limelight = limeIn;
     this.drivetrain = driveIn;
     addRequirements(limeIn, driveIn);
