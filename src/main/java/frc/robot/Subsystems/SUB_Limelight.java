@@ -7,13 +7,13 @@ package frc.robot.Subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.math.geometry.Pose3d;
 
 public class SUB_Limelight extends SubsystemBase {
   private NetworkTable table;
@@ -26,9 +26,9 @@ public class SUB_Limelight extends SubsystemBase {
   /**
    * Returns robot pose in terms of x,y,z position on the field in meters, and roll, pitch yaw, in degrees. 
    * @implNote (X, Y, Z (meters), ROLL, PITCH, YAW (degrees))
-   * @return Botpose network tables entry in Pose3d
+   * @return Botpose network tables entry in Pose2d
    */
-  public Pose3d getPose(){
+  public Pose2d getPose(){
     NetworkTableEntry entry = table.getEntry("botpose");
     double[] poseArr = entry.getDoubleArray(new double[0]);
 
@@ -38,7 +38,7 @@ public class SUB_Limelight extends SubsystemBase {
     }
 
     // x,y and -yaw.
-    return new Pose3d(new Pose2d(poseArr[0], poseArr[1], new Rotation2d(-poseArr[5])));
+    return new Pose2d(poseArr[0], poseArr[1], new Rotation2d(-poseArr[5]));
   }
 
   @Override
@@ -74,11 +74,12 @@ public class SUB_Limelight extends SubsystemBase {
 
   /**
    * Returns target pose in terms of x,y,z position on the field in meters, and roll, pitch yaw, in degrees. 
+   * Robot relative pose (robot is at the origin, 2d transform to get to primary April Tag)
    * @implNote We assume that the array is shaped (X, Y, Z (meters), ROLL, PITCH, YAW (degrees)), however, ENSURE that this is the case.
-   * @return Get the 3D transform needed to get to the target in Pose3D
+   * @return Get the 2D transform needed to get to the target in Pose3D
    */
-  public Transform3d getTargetTransform(){
-    NetworkTableEntry entry = table.getEntry("target-pose_cameraspace");
+  public Transform2d getTargetTransform(){
+    NetworkTableEntry entry = table.getEntry("target-pose_robotspace");
     double[] resultArr = entry.getDoubleArray(new double[0]);
 
     // If the result array is empty/contains the default array (double[0])
@@ -86,11 +87,10 @@ public class SUB_Limelight extends SubsystemBase {
       return null;
     }
 
-    Translation3d transl3d = new Translation3d(resultArr[0], resultArr[1], resultArr[2]);
-    Rotation3d rot3d = new Rotation3d(resultArr[3], resultArr[4], resultArr[5]);
-    // x,y and -yaw.
+    Translation2d transl2d = new Translation2d(resultArr[0], resultArr[1]);
+    Rotation2d rot2d = new Rotation2d(Units.degreesToRadians(-resultArr[5])); // -yaw of robot
 
-    return 
+    return new Transform2d(transl2d, rot2d);
   }
  
 
