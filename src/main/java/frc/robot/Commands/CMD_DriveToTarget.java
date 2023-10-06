@@ -3,33 +3,31 @@ package frc.robot.Commands;
 
 import frc.robot.Subsystems.SUB_Drivetrain;
 import frc.robot.Subsystems.SUB_Limelight;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class CMD_DriveToTarget extends CommandBase {
   SUB_Limelight limelight;
   SUB_Drivetrain drivetrain;
 
-  private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(3,2);
-  private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(3,2);
-  private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(8, 8);
+  // private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(3,2);
+  // private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(3,2);
+  // private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(8, 8);
 
-  private final ProfiledPIDController xController = new ProfiledPIDController(3, 0, 0, X_CONSTRAINTS);
-  private final ProfiledPIDController yController = new ProfiledPIDController(3, 0, 0, Y_CONSTRAINTS);
-  private final ProfiledPIDController omegaController = new ProfiledPIDController(2, 0, 0, OMEGA_CONSTRAINTS);
+  private final PIDController xController = new PIDController(0, 0, 0);
+  private final PIDController yController = new PIDController(0, 0, 0);
+  private final PIDController omegaController = new PIDController(0, 0, 0);
   
   /**
    * Drive to goal using limelight
-   * @param limeIn
-   * @param driveIn
+   * @param limelight The limelight subsystem
+   * @param drivetrain The drivetrain subsystem
    */
-  public CMD_DriveToTarget(SUB_Limelight limeIn, SUB_Drivetrain driveIn) {
-    this.limelight = limeIn;
-    this.drivetrain = driveIn;
-    addRequirements(limeIn, driveIn);
+  public CMD_DriveToTarget(SUB_Limelight limelight, SUB_Drivetrain drivetrain) {
+    this.limelight = limelight;
+    this.drivetrain = drivetrain;
+    addRequirements(limelight, drivetrain);
   }
 
   @Override
@@ -45,23 +43,24 @@ public class CMD_DriveToTarget extends CommandBase {
 
     if (targetTransform != null){
         var goalPose = robotPose.transformBy(targetTransform);
+        SmartDashboard.putNumber("X Error", goalPose.getX() - robotPose.getX());
+        SmartDashboard.putNumber("Y Error", goalPose.getY() - robotPose.getY());
+        SmartDashboard.putNumber("Z Error", goalPose.getRotation().getRadians() - robotPose.getRotation().getRadians());
         
-        xController.setGoal(goalPose.getX());
-        yController.setGoal(goalPose.getY());
-        omegaController.setGoal(goalPose.getRotation().getRadians());
 
-        var xSpeed = xController.calculate(robotPose.getX());
-        if (xController.atGoal()){
+
+        var xSpeed = xController.calculate(robotPose.getX(), goalPose.getX());
+        if (xController.atSetpoint()){
           xSpeed = 0;
         }
 
-        var ySpeed = yController.calculate(robotPose.getY());
-        if (yController.atGoal()){
+        var ySpeed = yController.calculate(robotPose.getY(), goalPose.getY());
+        if (yController.atSetpoint()){
           ySpeed = 0;
         }
 
-        var omegaSpeed = omegaController.calculate(robotPose.getRotation().getRadians());
-        if (omegaController.atGoal()){
+        var omegaSpeed = omegaController.calculate(robotPose.getRotation().getRadians(), goalPose.getRotation().getRadians());
+        if (omegaController.atSetpoint()){
           omegaSpeed = 0;
         }
 
@@ -77,6 +76,7 @@ public class CMD_DriveToTarget extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    // return (xController.atSetpoint() && yController.atSetpoint() && omegaController.atSetpoint())
     return false;
   }
 }
