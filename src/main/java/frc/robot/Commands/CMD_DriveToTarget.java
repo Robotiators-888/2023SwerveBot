@@ -46,23 +46,10 @@ public class CMD_DriveToTarget extends CommandBase {
         SmartDashboard.putNumber("X Error", goalPose.getX() - robotPose.getX());
         SmartDashboard.putNumber("Y Error", goalPose.getY() - robotPose.getY());
         SmartDashboard.putNumber("Z Error", goalPose.getRotation().getRadians() - robotPose.getRotation().getRadians());
-        
-
 
         var xSpeed = xController.calculate(robotPose.getX(), goalPose.getX());
-        if (xController.atSetpoint()){
-          xSpeed = 0;
-        }
-
         var ySpeed = yController.calculate(robotPose.getY(), goalPose.getY());
-        if (yController.atSetpoint()){
-          ySpeed = 0;
-        }
-
         var omegaSpeed = omegaController.calculate(robotPose.getRotation().getRadians(), goalPose.getRotation().getRadians());
-        if (omegaController.atSetpoint()){
-          omegaSpeed = 0;
-        }
 
         drivetrain.drive(xSpeed, ySpeed, omegaSpeed, true, true);
     }
