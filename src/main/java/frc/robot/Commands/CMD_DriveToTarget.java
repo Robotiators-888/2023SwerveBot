@@ -32,7 +32,7 @@ public class CMD_DriveToTarget extends CommandBase {
 
   @Override
   public void initialize() {
-    limelight.setLed(3);
+    limelight.setPipline(0);
   }
 
   @Override
@@ -40,9 +40,9 @@ public class CMD_DriveToTarget extends CommandBase {
     var targetTransform = limelight.getTargetTransform();
     var robotPose = drivetrain.getPose();
 
-
     if (targetTransform != null){
         var goalPose = robotPose.transformBy(targetTransform);
+        SmartDashboard.putBoolean("Has Target", true);
         SmartDashboard.putNumber("X Error", goalPose.getX() - robotPose.getX());
         SmartDashboard.putNumber("Y Error", goalPose.getY() - robotPose.getY());
         SmartDashboard.putNumber("Z Error", goalPose.getRotation().getRadians() - robotPose.getRotation().getRadians());
@@ -52,6 +52,8 @@ public class CMD_DriveToTarget extends CommandBase {
         var omegaSpeed = omegaController.calculate(robotPose.getRotation().getRadians(), goalPose.getRotation().getRadians());
 
         drivetrain.drive(xSpeed, ySpeed, omegaSpeed, true, true);
+    } else {
+      SmartDashboard.putBoolean("Has Target", false);
     }
   }
 
