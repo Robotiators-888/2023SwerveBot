@@ -4,23 +4,27 @@
 
 package frc.robot.Subsystems;
 
+import frc.robot.LimelightHelpers;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import static frc.robot.Constants.Limelight.*;
 
 public class SUB_Limelight extends SubsystemBase {
   private NetworkTable table;
 
   /** Creates a new SUB_Limelight. */
   public SUB_Limelight() {
-    this.table = NetworkTableInstance.getDefault().getTable("limelight");
+    this.table = NetworkTableInstance.getDefault().getTable(LIMELIGHT_NAME);
   }
 
   /**
@@ -29,8 +33,7 @@ public class SUB_Limelight extends SubsystemBase {
    * @return Botpose network tables entry in Pose2d
    */
   public Pose2d getPose(){
-    NetworkTableEntry entry = table.getEntry("botpose");
-    double[] poseArr = entry.getDoubleArray(new double[0]);
+    double[] poseArr = LimelightHelpers.getBotPose(LIMELIGHT_NAME);
 
     // If the pose array is empty/contains the default array (double[0])
     if (poseArr.length == 0){
@@ -44,14 +47,11 @@ public class SUB_Limelight extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("ID", LimelightHelpers.getFiducialID(LIMELIGHT_NAME));
   }
 
   public boolean getTv() {
-    if (table.getEntry("tv").getDouble(0) == 1) {
-      return true;
-    } else {
-      return false;
-    }
+    return LimelightHelpers.getTV(LIMELIGHT_NAME);
   }
 
   /**
@@ -60,7 +60,7 @@ public class SUB_Limelight extends SubsystemBase {
    * @return double of offset of target x-value
    */
   public double getTx() {
-    return table.getEntry("tx").getDouble(0);
+    return LimelightHelpers.getTX(LIMELIGHT_NAME);
   }
 
   /**
@@ -69,28 +69,15 @@ public class SUB_Limelight extends SubsystemBase {
    * @return double of offset of target y-value
    */
   public double getTy() {
-    return table.getEntry("ty").getDouble(0);
+    return LimelightHelpers.getTY(LIMELIGHT_NAME);
   }
 
   /**
-   * Returns target pose in terms of x,y,z position on the field in meters, and roll, pitch yaw, in degrees. 
-   * Robot relative pose (robot is at the origin, 2d transform to get to primary April Tag)
-   * @implNote We assume that the array is shaped (X, Y, Z (meters), ROLL, PITCH, YAW (degrees)), however, ENSURE that this is the case.
-   * @return Get the 2D transform needed to get to the target in Pose3D
+   * Returns the target's pose 2d relative to the robot (the robot is the origin)
+   * @return Get the 3D pose needed of target
    */
   public Transform2d getTargetTransform(){
-    NetworkTableEntry entry = table.getEntry("target-pose_robotspace");
-    double[] resultArr = entry.getDoubleArray(new double[0]);
-
-    // If the result array is empty/contains the default array (double[0])
-    if (resultArr.length == 0){
-      return null;
-    }
-
-    Translation2d transl2d = new Translation2d(resultArr[0], resultArr[1]);
-    Rotation2d rot2d = new Rotation2d(Units.degreesToRadians(-resultArr[5])); // -yaw of robot
-
-    return new Transform2d(transl2d, rot2d);
+    return new Transform2d(new Pose2d(), LimelightHelpers.getTargetPose3d_RobotSpace(LIMELIGHT_NAME).toPose2d());
   }
  
 
