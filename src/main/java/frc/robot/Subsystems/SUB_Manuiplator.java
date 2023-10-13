@@ -18,6 +18,7 @@ import frc.robot.Constants;
 
 
 
+
 public class SUB_Manuiplator extends SubsystemBase {
     private final CANSparkMax rotateMotor = new CANSparkMax(Constants.Manuiplator.kMANUIP_ROTATE_MOTOR_CANID, MotorType.kBrushless);
     public final SparkMaxAbsoluteEncoder rotateEncoder = rotateMotor.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);

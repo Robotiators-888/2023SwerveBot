@@ -29,6 +29,15 @@ public class RobotManager {
     private RobotManager(){
         targetScoring = TargetScoring.HIGH;
     }
+    public void setScoringHeightLow(){
+        targetScoring = TargetScoring.LOW;
+    }
+    public void setScoringHeightMid(){
+        targetScoring = TargetScoring.MED;
+    }
+    public void setScoringHeightHigh(){
+        targetScoring = TargetScoring.HIGH;
+    }
 
     public double getScoringHeight(){
         return targetScoring.getValue();

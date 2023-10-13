@@ -4,15 +4,15 @@
 
 package frc.robot;
 
-
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Subsystems.SUB_Drivetrain;
 import frc.robot.Subsystems.SUB_Extension;
@@ -28,6 +28,7 @@ public class RobotContainer {
   public static SUB_Extension extension = new SUB_Extension();
   public static RobotManager manager = RobotManager.getInstance();
 
+
   Joystick joystick = new Joystick(0);
   LogiUtils DriverC = new LogiUtils(0);
   LogiUtils logiUtils1 = new LogiUtils(1);
@@ -35,65 +36,68 @@ public class RobotContainer {
   JoystickButton RightBumperC = DriverC.getRightBumperButtonPressed();
   JoystickButton leftBumper = logiUtils1.getLeftBumperButtonPressed();
   JoystickButton rightBumper = logiUtils1.getRightBumperButtonPressed();
-  JoystickButton aButton = logiUtils1.getAButtonPressed(); //Ground
-  JoystickButton yButton = logiUtils1.getYButtonPressed(); //Stow/up
-  JoystickButton xButton = logiUtils1.getXButtonPressed(); //Single Feed
-  JoystickButton bButton = logiUtils1.getBButtonPressed(); //Scoring Height
+  JoystickButton aButton = logiUtils1.getAButtonPressed(); // Ground
+  JoystickButton yButton = logiUtils1.getYButtonPressed(); // Stow/up
+  JoystickButton xButton = logiUtils1.getXButtonPressed(); // Single Feed
+  JoystickButton bButton = logiUtils1.getBButtonPressed(); // Scoring Height
+  JoystickButton startButton = logiUtils1.getStartButtonPressed();
+  JoystickButton backButton = logiUtils1.getBackButtonPressed();
 
-  private AutoBuilder autoBuilder = new AutoBuilder(drivetrain);
+  private AutoBuilder autoBuilder = new AutoBuilder(drivetrain, extension, intake, manuiplator);
 
   public RobotContainer() {
     configureBindings();
 
     // Configure default commands
 
-    
     drivetrain.setDefaultCommand(
         new RunCommand(
             () -> drivetrain.drive(
-                -MathUtil.applyDeadband(DriverC.getRawAxis(1), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(DriverC.getRawAxis(0), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(Math.pow(DriverC.getRawAxis(1), 3), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(Math.pow(DriverC.getRawAxis(0), 3), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(DriverC.getRawAxis(4), OIConstants.kDriveDeadband),
                 true, true),
-                drivetrain));
+            drivetrain));
   }
 
-  public void periodic(){
+  public void periodic() {
     SmartDashboard.putNumber("Scoring height", manager.getScoringHeight());
+
   }
-
-    // Flight Controller
-    // drivetrain.setDefaultCommand(
-    //     new RunCommand(
-    //         () -> drivetrain.drive(
-    //             -MathUtil.applyDeadband(joystick.getRawAxis(1), OIConstants.kDriveDeadband),
-    //             -MathUtil.applyDeadband(joystick.getRawAxis(0), OIConstants.kDriveDeadband),
-    //             -MathUtil.applyDeadband(joystick.getRawAxis(2), OIConstants.kDriveDeadband),
-    //             true, true),
-    //             drivetrain));
-
 
   private void configureBindings() {
-    aButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kGroundPosition, manuiplator)));
-    bButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(manager.getScoringHeight(), manuiplator)));
-    yButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kStow, manuiplator)));
-    xButton.onTrue(new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kSingleFeeder, manuiplator)));
+    aButton.onTrue(new InstantCommand(() -> manuiplator.setTargetPosition(Constants.Manuiplator.kGroundPosition, manuiplator)));
+    bButton.onTrue(new InstantCommand(() -> manuiplator.setTargetPosition(manager.getScoringHeight(), manuiplator)));
+    yButton.onTrue(new InstantCommand(() -> manuiplator.setTargetPosition(Constants.Manuiplator.kStow, manuiplator)));
+    xButton.onTrue(new InstantCommand(() -> manuiplator.setTargetPosition(Constants.Manuiplator.kSingleFeeder, manuiplator)));
 
-    leftBumperC.whileTrue(new RunCommand(()->SUB_Intake.intakeIn(),manuiplator)).onFalse(new InstantCommand(()->SUB_Intake.intakeStop()));
-    RightBumperC.whileTrue(new RunCommand(()->SUB_Intake.intakeOut(),manuiplator)).onFalse(new InstantCommand(()->SUB_Intake.intakeStop()));
+   
+    leftBumperC.whileTrue(new RunCommand(() -> SUB_Intake.intakeIn(), manuiplator))
+        .onFalse(new InstantCommand(() -> SUB_Intake.intakeStop()));
+    RightBumperC.whileTrue(new RunCommand(() -> SUB_Intake.intakeOut(), manuiplator))
+        .onFalse(new InstantCommand(() -> SUB_Intake.intakeStop()));
+        
+    startButton.onTrue(autoBuilder.ScoreOne());
+    backButton.onTrue(autoBuilder.ScoreOneMid());
+        
+          
+    manuiplator.setDefaultCommand(new RunCommand(() -> manuiplator.runAutomatic(), manuiplator));
 
-    manuiplator.setDefaultCommand(new RunCommand(()-> manuiplator.runAutomatic(), manuiplator));
+    leftBumper.whileTrue(new RunCommand(() -> SUB_Extension.driveMotor(Constants.Extension.kReverseSpeed), extension))
+        .onFalse(new InstantCommand(() -> SUB_Extension.extendStop()));
+    rightBumper.whileTrue(new RunCommand(() -> SUB_Extension.driveMotor(Constants.Extension.kForwardSpeed), extension))
+        .onFalse(new InstantCommand(() -> SUB_Extension.extendStop()));
 
-    leftBumper.whileTrue(new RunCommand(()->SUB_Extension.driveMotor(Constants.Extension.kReverseSpeed), extension)).onFalse(new InstantCommand(()->SUB_Extension.extendStop()));
-    rightBumper.whileTrue(new RunCommand(()->SUB_Extension.driveMotor(Constants.Extension.kForwardSpeed), extension)).onFalse(new InstantCommand(()->SUB_Extension.extendStop()));
-
-
+    new Trigger(() -> (Math
+        .abs(Math.pow(logiUtils1.getLeftTriggerAxis(), 2) - Math.pow(logiUtils1.getRightTriggerAxis(), 2)) > .05))
+        .whileTrue(new RunCommand(
+            () -> manuiplator.runManual(
+                (Math.pow(logiUtils1.getLeftTriggerAxis(), 3) - Math.pow(logiUtils1.getRightTriggerAxis(), 3)) * .5),
+            manuiplator));
   }
 
-  public Command getAutonmousCommand(){
+  public Command getAutonmousCommand() {
     return autoBuilder.getSelectedAuto();
   }
 
-  
-  
 }
