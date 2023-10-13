@@ -15,9 +15,9 @@ public class CMD_DriveToTarget extends CommandBase {
   // private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(3,2);
   // private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(8, 8);
 
-  private final PIDController xController = new PIDController(0, 0, 0);
-  private final PIDController yController = new PIDController(0, 0, 0);
-  private final PIDController omegaController = new PIDController(0, 0, 0);
+  private final PIDController xController = new PIDController(0, 0, 0); // 3, 0, 0
+  private final PIDController yController = new PIDController(0, 0, 0); // 3, 0, 0
+  private final PIDController omegaController = new PIDController(0, 0, 0); // 2, 0, 0
   
   /**
    * Drive to goal using limelight
