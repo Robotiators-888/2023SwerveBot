@@ -104,7 +104,7 @@ public class RobotContainer {
     return autoBuilder.getSelectedAuto();
   }
 
-  public void periodic(){
+  public static void periodic(){
     Pose2d visionPose = limelight.getPose();
     if (visionPose != null){
       drivetrain.addVisionMeasurement(visionPose);
