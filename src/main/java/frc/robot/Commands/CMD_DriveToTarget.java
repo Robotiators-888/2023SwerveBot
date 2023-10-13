@@ -32,7 +32,7 @@ public class CMD_DriveToTarget extends CommandBase {
 
   @Override
   public void initialize() {
-    limelight.setPipline(0);
+    limelight.setPipeline(0);
   }
 
   @Override
