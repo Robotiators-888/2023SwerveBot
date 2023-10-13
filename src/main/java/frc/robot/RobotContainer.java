@@ -41,10 +41,7 @@ public class RobotContainer {
   JoystickButton xButton = logiUtils1.getXButtonPressed(); // Single Feed
   JoystickButton bButton = logiUtils1.getBButtonPressed(); // Scoring Height
   JoystickButton startButton = logiUtils1.getStartButtonPressed();
-<<<<<<< HEAD
   JoystickButton backButton = logiUtils1.getBackButtonPressed();
-=======
->>>>>>> fe5a2ae (Colin sucks at github)
 
   private AutoBuilder autoBuilder = new AutoBuilder(drivetrain, extension, intake, manuiplator);
 
@@ -79,13 +76,9 @@ public class RobotContainer {
         .onFalse(new InstantCommand(() -> SUB_Intake.intakeStop()));
     RightBumperC.whileTrue(new RunCommand(() -> SUB_Intake.intakeOut(), manuiplator))
         .onFalse(new InstantCommand(() -> SUB_Intake.intakeStop()));
-<<<<<<< HEAD
         
     startButton.onTrue(autoBuilder.ScoreOne());
     backButton.onTrue(autoBuilder.ScoreOneMid());
-=======
-    startButton.onTrue(autoBuilder.ScoreOne());
->>>>>>> fe5a2ae (Colin sucks at github)
         
           
     manuiplator.setDefaultCommand(new RunCommand(() -> manuiplator.runAutomatic(), manuiplator));
