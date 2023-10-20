@@ -114,6 +114,7 @@ public class AutoBuilder {
     /* chooser.addOption("Dummy 1", dummyPathOne());
     chooser.addOption("Dummy Donut", dummyPathDonut());
     chooser.addOption("8's HEHEHEHE", figureEight());
+    */
     chooser.addOption("Score Two NonCable", nonCableSide2Pc());
     chooser.addOption("Score One NonCable", score1BackNoCable());
     chooser.addOption("Score One Cable", score1BackCable());
@@ -135,9 +136,11 @@ public class AutoBuilder {
   // ====================================================================
 
   private Command returnManipulator(){
-    return new SequentialCommandGroup(
-        new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kGroundPosition, manuiplator)),
-        extension.driveUntil(1, true)
+    return new SequentialCommandGroup( 
+        extension.driveUntil(1, true),
+        new WaitCommand(.1),
+        new InstantCommand(()->manuiplator.setTargetPosition(Constants.Manuiplator.kGroundPosition, manuiplator))
+       
 
     );
   }
