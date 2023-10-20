@@ -4,10 +4,6 @@
 
 package frc.robot;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 2c31ac7 (logging and team changing impl)
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Joystick;
@@ -75,10 +71,6 @@ public class RobotContainer {
     poseEntry = new DoubleArrayLogEntry(log, "odometry/pose");
   }
 
-  public void periodic() {
-    SmartDashboard.putNumber("Scoring height", manager.getScoringHeight());
-
-  }
 
   private void configureBindings() {
     aButton.onTrue(new InstantCommand(() -> manuiplator.setTargetPosition(Constants.Manuiplator.kGroundPosition, manuiplator)));
@@ -116,6 +108,8 @@ public class RobotContainer {
   }
 
   public void periodic(){
+    SmartDashboard.putNumber("Scoring height", manager.getScoringHeight());
+
     Pose2d visionPose = limelight.getPose();
     if (visionPose != null){
       drivetrain.addVisionMeasurement(visionPose);
