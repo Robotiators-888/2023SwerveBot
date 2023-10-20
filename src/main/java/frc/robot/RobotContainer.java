@@ -5,7 +5,6 @@
 package frc.robot;
 
 
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Joystick;
@@ -15,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Commands.CMD_DriveToTarget;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Subsystems.SUB_Drivetrain;
 import frc.robot.Subsystems.SUB_Extension;
@@ -24,6 +22,9 @@ import frc.robot.Subsystems.SUB_Limelight;
 import frc.robot.Subsystems.SUB_Manuiplator;
 import frc.robot.utils.AutoBuilder;
 import frc.robot.utils.LogiUtils;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
 
 public class RobotContainer {
   public static SUB_Drivetrain drivetrain = new SUB_Drivetrain();
@@ -46,7 +47,9 @@ public class RobotContainer {
   JoystickButton xButton = logiUtils1.getXButtonPressed(); //Single Feed
   JoystickButton bButton = logiUtils1.getBButtonPressed(); //Scoring Height
   JoystickButton startButtonC = DriverC.getStartButtonPressed();
- 
+  DataLog log;
+  DoubleArrayLogEntry poseEntry;
+
   private AutoBuilder autoBuilder = new AutoBuilder(drivetrain, extension, intake, manuiplator);
 
   public RobotContainer() {
@@ -63,6 +66,9 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(DriverC.getRawAxis(4), OIConstants.kDriveDeadband),
                 true, true),
                 drivetrain));
+    
+    log = DataLogManager.getLog();
+    poseEntry = new DoubleArrayLogEntry(log, "odometry/pose");
   }
 
 
@@ -77,8 +83,6 @@ public class RobotContainer {
     RightBumperC.whileTrue(new RunCommand(()->SUB_Intake.intakeOut(),manuiplator)).onFalse(new InstantCommand(()->SUB_Intake.intakeStop()));
 
     manuiplator.setDefaultCommand(new RunCommand(()-> manuiplator.runAutomatic(), manuiplator));
-    
-    startButtonC.whileTrue(new CMD_DriveToTarget(limelight, drivetrain)).onFalse(new InstantCommand(()->drivetrain.drive(0,0,0,true,true)));
    
     leftBumper.whileTrue(new RunCommand(()->SUB_Extension.driveMotor(Constants.Extension.kReverseSpeed), extension)).onFalse(new InstantCommand(()->SUB_Extension.extendStop()));
     rightBumper.whileTrue(new RunCommand(()->SUB_Extension.driveMotor(Constants.Extension.kForwardSpeed), extension)).onFalse(new InstantCommand(()->SUB_Extension.extendStop()));
@@ -95,10 +99,17 @@ public class RobotContainer {
     return autoBuilder.getSelectedAuto();
   }
 
-  public static void periodic(){
+  public void periodic(){
     Pose2d visionPose = limelight.getPose();
     if (visionPose != null){
       drivetrain.addVisionMeasurement(visionPose);
     }
+
+    Pose2d current_pose = drivetrain.getPose();
+    double x = current_pose.getX();
+    double y = current_pose.getY();
+    double rotation_degs = current_pose.getRotation().getDegrees();
+    double[] loggedPose = {x, y, rotation_degs};
+    poseEntry.append(loggedPose);
   }
 }
