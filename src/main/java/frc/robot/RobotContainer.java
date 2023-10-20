@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Commands.CMD_LimeAlign;
+import frc.robot.Commands.CMD_DriveToTarget;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Subsystems.SUB_Drivetrain;
 import frc.robot.Subsystems.SUB_Extension;
