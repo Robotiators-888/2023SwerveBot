@@ -7,12 +7,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
-import frc.robot.Robot;
 import frc.robot.RobotManager;
 import frc.robot.Subsystems.SUB_Drivetrain;
 import frc.robot.Subsystems.SUB_Extension;
@@ -116,8 +114,9 @@ public class AutoBuilder {
     /* chooser.addOption("Dummy 1", dummyPathOne());
     chooser.addOption("Dummy Donut", dummyPathDonut());
     chooser.addOption("8's HEHEHEHE", figureEight());
-    chooser.addOption("Score One", ScoreOne());
     chooser.addOption("Score Two NonCable", nonCableSide2Pc());
+    chooser.addOption("Score One NonCable", score1BackNoCable());
+    chooser.addOption("Score One Cable", score1BackCable());
 
 
     chooser.setDefaultOption("Score One", ScoreOne());
