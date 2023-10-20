@@ -11,9 +11,11 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static frc.robot.Constants.Limelight.*;
+import edu.wpi.first.wpilibj.DriverStation;
 
 public class SUB_Limelight extends SubsystemBase {
 
+  private DriverStation.Alliance allianceColor;
   public enum LED_Mode {
     FORCE_OFF,
     FORCE_ON,
@@ -22,7 +24,7 @@ public class SUB_Limelight extends SubsystemBase {
 
   /** Creates a new SUB_Limelight. */
   public SUB_Limelight() {
-
+    allianceColor = DriverStation.getAlliance();
   }
 
   /**
@@ -32,7 +34,12 @@ public class SUB_Limelight extends SubsystemBase {
    */
   public Pose2d getPose(){
     LimelightResults llresults = LimelightHelpers.getLatestResults(LIMELIGHT_NAME);
-    return llresults.targetingResults.getBotPose2d();    
+
+    switch (allianceColor){
+      case Red: return llresults.targetingResults.getBotPose2d_wpiRed();
+      case Blue: return llresults.targetingResults.getBotPose2d_wpiBlue();
+      default: return llresults.targetingResults.getBotPose2d_wpiBlue(); // Default
+    }
   }
 
   @Override

@@ -39,6 +39,9 @@
     }
   },
   "NetworkTables": {
+    "Persistent Values": {
+      "open": false
+    },
     "transitory": {
       "LiveWindow": {
         "open": true
