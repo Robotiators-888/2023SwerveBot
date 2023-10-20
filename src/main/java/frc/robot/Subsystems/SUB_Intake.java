@@ -15,13 +15,13 @@ public class SUB_Intake extends SubsystemBase {
   private final static TalonSRX intakeMotor = new TalonSRX(Constants.Manuiplator.kMANUIP_INTAKE_MOTOR_CANID);
 
   public static void intakeIn(){
-    intakeMotor.set(TalonSRXControlMode.PercentOutput, -0.80);
+    intakeMotor.set(TalonSRXControlMode.PercentOutput, -0.75);
   }
   public static void intakeOut(){
-    intakeMotor.set(TalonSRXControlMode.PercentOutput,0.80);
+    intakeMotor.set(TalonSRXControlMode.PercentOutput,0.75);
   }
   public static void intakeStop(){
-    intakeMotor.set(TalonSRXControlMode.PercentOutput,.1);
+    intakeMotor.set(TalonSRXControlMode.PercentOutput,0);
   }
   
   public void runIntake(double speed){
