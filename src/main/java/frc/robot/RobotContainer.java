@@ -90,9 +90,9 @@ public class RobotContainer {
           
     manuiplator.setDefaultCommand(new RunCommand(() -> manuiplator.runAutomatic(), manuiplator));
 
-    leftBumper.whileTrue(new RunCommand(() -> SUB_Extension.driveMotor(Constants.Extension.kReverseSpeed), extension))
+    rightBumper.whileTrue(new RunCommand(() -> SUB_Extension.driveMotor(Constants.Extension.kReverseSpeed), extension))
         .onFalse(new InstantCommand(() -> SUB_Extension.extendStop()));
-    rightBumper.whileTrue(new RunCommand(() -> SUB_Extension.driveMotor(Constants.Extension.kForwardSpeed), extension))
+    leftBumper.whileTrue(new RunCommand(() -> SUB_Extension.driveMotor(Constants.Extension.kForwardSpeed), extension))
         .onFalse(new InstantCommand(() -> SUB_Extension.extendStop()));
 
     new Trigger(() -> (Math
