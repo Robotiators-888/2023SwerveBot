@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Commands.CMD_DriveToTarget;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Subsystems.SUB_Drivetrain;
 import frc.robot.Subsystems.SUB_Extension;
@@ -84,10 +85,11 @@ public class RobotContainer {
     RightBumperC.whileTrue(new RunCommand(() -> SUB_Intake.intakeOut(), manuiplator))
         .onFalse(new InstantCommand(() -> SUB_Intake.intakeStop()));
         
-    startButton.onTrue(autoBuilder.ScoreOne());
+    //startButton.onTrue(autoBuilder.ScoreOne());
     backButton.onTrue(autoBuilder.ScoreOneMid());
+
+    startButton.whileTrue(new CMD_DriveToTarget(limelight, drivetrain)).onFalse(new InstantCommand(()->drivetrain.drive(0,0,0,true,true)));
         
-          
     manuiplator.setDefaultCommand(new RunCommand(() -> manuiplator.runAutomatic(), manuiplator));
 
     rightBumper.whileTrue(new RunCommand(() -> SUB_Extension.driveMotor(Constants.Extension.kReverseSpeed), extension))

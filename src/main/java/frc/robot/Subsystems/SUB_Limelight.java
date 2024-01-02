@@ -75,6 +75,8 @@ public class SUB_Limelight extends SubsystemBase {
    * @return The Transform2D that represents the translation and rotation needed to get from robot to target.
    */
   public Transform2d getTargetTransform(){
+    SmartDashboard.putNumber("X VAL TARGET", LimelightHelpers.getTargetPose3d_RobotSpace(LIMELIGHT_NAME).toPose2d().getX());
+    SmartDashboard.putNumber("Y VAL TARGET", LimelightHelpers.getTargetPose3d_RobotSpace(LIMELIGHT_NAME).toPose2d().getY());
     return new Transform2d(new Pose2d(), LimelightHelpers.getTargetPose3d_RobotSpace(LIMELIGHT_NAME).toPose2d());
   }
  
