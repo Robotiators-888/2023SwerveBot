@@ -49,9 +49,35 @@ public class CMD_DriveToTarget extends CommandBase {
 
         var xSpeed = xController.calculate(robotPose.getX(), goalPose.getX());
         var ySpeed = yController.calculate(robotPose.getY(), goalPose.getY());
-        var omegaSpeed = omegaController.calculate(robotPose.getRotation().getRadians(), goalPose.getRotation().getRadians());
 
-        drivetrain.drive(xSpeed, ySpeed, omegaSpeed, false, true);
+        // LL Pose: + X is forward,  + Y is to the right
+        double xError = goalPose.getX() - robotPose.getX(); // Front error
+        double yError = goalPose.getY() - robotPose.getY(); // Side error
+
+        double oError = 0;
+        if (xError > 0){
+          oError = -Math.atan(yError/xError);
+        } else if (xError < 0){
+          if (yError > 0){
+            oError = -(Math.PI) - Math.atan(yError/xError);
+          } else {
+            oError = (Math.PI) - Math.atan(yError/xError);
+          }
+        }
+
+        var omegaSpeed = omegaController.calculate(0, oError);
+
+        // Robot Pose: + X is forward, + Y is to the left, + Theta is counterclockwise
+        drivetrain.drive(0.5*xSpeed, 0.5 * ySpeed, 0.5 * omegaSpeed, false, true);
+
+
+        // Front (+X)
+        // Left arctan(abs())
+        // Right -arctan(abs())
+
+        // Back (-X)
+        // Left 90 + arctan(abs(x/y))
+        // Right -90 - arctan(abs(x/y))
     } else {
       SmartDashboard.putBoolean("Has Target", false);
     }
