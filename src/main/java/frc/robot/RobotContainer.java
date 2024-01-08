@@ -18,7 +18,6 @@ import frc.robot.Commands.CMD_DriveToTarget;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Subsystems.SUB_Drivetrain;
 import frc.robot.Subsystems.SUB_Limelight;
-import frc.robot.utils.AutoBuilder;
 import frc.robot.utils.LogiUtils;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.util.datalog.DataLog;
