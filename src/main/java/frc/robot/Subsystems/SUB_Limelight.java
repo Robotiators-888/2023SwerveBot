@@ -8,6 +8,7 @@ import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static frc.robot.Constants.Limelight.*;
@@ -74,10 +75,10 @@ public class SUB_Limelight extends SubsystemBase {
    * Returns the transform required to get to the target from the robot.
    * @return The Transform2D that represents the translation and rotation needed to get from robot to target.
    */
-  public Transform2d getTargetTransform(){
+  public Pose3d getTargetTransform(){
     SmartDashboard.putNumber("X VAL TARGET", LimelightHelpers.getTargetPose3d_RobotSpace(LIMELIGHT_NAME).toPose2d().getX());
     SmartDashboard.putNumber("Y VAL TARGET", LimelightHelpers.getTargetPose3d_RobotSpace(LIMELIGHT_NAME).toPose2d().getY());
-    return new Transform2d(new Pose2d(), LimelightHelpers.getTargetPose3d_RobotSpace(LIMELIGHT_NAME).toPose2d());
+    return LimelightHelpers.getTargetPose3d_RobotSpace(LIMELIGHT_NAME);
   }
  
 
