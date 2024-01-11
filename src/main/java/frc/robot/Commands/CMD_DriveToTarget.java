@@ -49,7 +49,7 @@ public class CMD_DriveToTarget extends CommandBase {
         SmartDashboard.putNumber("GOAL POSE Z", targetTransform.getZ());
         SmartDashboard.putNumber("GOAL POSE X", targetTransform.getX());
 
-        var xSpeed = xController.calculate(0, targetTransform.getZ()-1);
+        var xSpeed = xController.calculate(0, targetTransform.getZ());
         var ySpeed = yController.calculate(0, targetTransform.getX());
        var omegaSpeed = omegaController.calculate(0, targetTransform.getRotation().getY());
 

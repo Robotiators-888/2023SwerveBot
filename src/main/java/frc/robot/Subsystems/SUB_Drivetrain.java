@@ -6,6 +6,7 @@ package frc.robot.Subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -22,6 +23,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.utils.*;
+
+import java.io.IOException;
+
 import org.littletonrobotics.junction.Logger;
 
 public class SUB_Drivetrain extends SubsystemBase {
@@ -43,7 +47,8 @@ public class SUB_Drivetrain extends SubsystemBase {
   private final MAXSwerveModule backRight 
     = new MAXSwerveModule(Constants.Drivetrain.kBACK_RIGHT_DRIVE_MOTOR_CANID, 
     Constants.Drivetrain.kBACK_RIGHT_STEER_MOTOR_CANID, Constants.Drivetrain.kBackRightChassisAngularOffset);    
-
+  
+  public AprilTagFieldLayout at_field;
 
   AHRS navx = new AHRS();
 
@@ -69,7 +74,13 @@ public class SUB_Drivetrain extends SubsystemBase {
       backRight.getPosition()
   }, new Pose2d());
 
-  public SUB_Drivetrain() {}
+  public SUB_Drivetrain() {
+    try {
+      at_field = new AprilTagFieldLayout("2023_april_tag.json");
+    } catch (IOException e){
+      System.out.println("Failed to init AprilTagFieldLayout.");
+    }
+  }
 
   @Override
   public void periodic() {
