@@ -5,10 +5,11 @@ import frc.robot.LimelightHelpers;
 import frc.robot.Subsystems.SUB_Drivetrain;
 import frc.robot.Subsystems.SUB_Limelight;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class CMD_DriveToTarget extends CommandBase {
+public class CMD_AbsoluteDriveToTarget extends CommandBase {
   SUB_Limelight limelight;
   SUB_Drivetrain drivetrain;
 
@@ -19,15 +20,17 @@ public class CMD_DriveToTarget extends CommandBase {
   private final PIDController xController = new PIDController(0.3, 0, 2); // 3, 0, 0
   private final PIDController yController = new PIDController(3/5, 0, 0); // 3, 0, 0
   private final PIDController omegaController = new PIDController( 0.25, 0, 0); // 2, 0, 0
+  private final Pose2d goalPose;
   
   /**
    * Drive to goal using limelight
    * @param limelight The limelight subsystem
    * @param drivetrain The drivetrain subsystem
    */
-  public CMD_DriveToTarget(SUB_Limelight limelight, SUB_Drivetrain drivetrain) {
+  public CMD_AbsoluteDriveToTarget(SUB_Limelight limelight, SUB_Drivetrain drivetrain, Pose2d goalPose) {
     this.limelight = limelight;
     this.drivetrain = drivetrain;
+    this.goalPose = goalPose;
 
     xController.setTolerance(0.1);
     yController.setTolerance(0.1);
@@ -42,22 +45,15 @@ public class CMD_DriveToTarget extends CommandBase {
 
   @Override
   public void execute() {
-    var targetTransform = limelight.getTargetTransform();
+    var robotPose = drivetrain.getPose();
 
-    if (targetTransform != null){
-        SmartDashboard.putNumber("ANGLE", targetTransform.getRotation().getAngle());
-        SmartDashboard.putNumber("GOAL POSE Z", targetTransform.getZ());
-        SmartDashboard.putNumber("GOAL POSE X", targetTransform.getX());
+    var xSpeed = xController.calculate(robotPose.getX(), goalPose.getX());
+    var ySpeed = yController.calculate(robotPose.getX(), goalPose.getY());
+    // In this case, it has to be what orientation we want the robot to be in.
+    var omegaSpeed = omegaController.calculate(robotPose.getRotation().getRadians(), goalPose.getRotation().getRadians());
 
-        var xSpeed = xController.calculate(0, targetTransform.getZ()-1);
-        var ySpeed = yController.calculate(0, targetTransform.getX());
-       var omegaSpeed = omegaController.calculate(0, targetTransform.getRotation().getY());
-
-        // Robot Pose: + X is forward, + Y is to the left, + Theta is counterclockwise
-        drivetrain.drive(xSpeed, -ySpeed, -omegaSpeed, false, true);
-    } else {
-      SmartDashboard.putBoolean("Has Target", false);
-    }
+    // Robot Pose: + X is forward, + Y is to the left, + Theta is counterclockwise
+    drivetrain.drive(xSpeed, -ySpeed, -omegaSpeed, false, true);
   }
 
   @Override
